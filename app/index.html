@@ -1,14 +1,92 @@
-<html>
-<body> 
-  <h1>Hello World!</h1>
-   We are using Electron 
-   <script> document.write(process.versions['electron']) </script> on 
-   <script> document.write(process.platform) </script>
-   <script type="text/javascript"> 
-      var fs = require('fs');
-      var file = fs.readFileSync('app/package.json'); 
-      document.write(file); 
-   </script>
+<!DOCTYPE html>
+<html ng-app="grabtangle">
+  <head>
+    <script src="node_modules/angular/angular.js"></script>
+    <script src="node_modules/angular-animate/angular-animate.js"></script>
+    <script src="ui-bootstrap-tpls-2.0.1.js"></script>
+    <script src="index.js"></script>
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <style>
+      .glyphicon
+      {
+        font-size: 20px;
+      }
+    </style>
+  </head>
+  <body>
 
-</body> 
-</html> 
+<div ng-controller="AccordionDemoCtrl">
+  <script type="text/ng-template" id="group-template.html">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <div class="accordion-toggle" style="cursor: pointer" ng-click="toggleOpen()" uib-accordion-transclude="heading">
+          <span uib-accordion-header ng-class="{'text-muted': isDisabled}">
+            {{heading}}
+          </span>
+        </div>
+      </h4>
+    </div>
+    <div class="panel-collapse collapse" uib-collapse="!isOpen">
+      <div class="panel-body" style="text-align: right" ng-transclude></div>
+    </div>
+  </script>
+
+  <p>
+    <button type="button" class="btn btn-default btn-sm" ng-click="status.open = !status.open">Toggle last panel</button>
+    <button type="button" class="btn btn-default btn-sm" ng-click="status.isFirstDisabled = ! status.isFirstDisabled">Enable / Disable first panel</button>
+  </p>
+
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" ng-model="oneAtATime">
+      Open only one at a time
+    </label>
+  </div>
+  <uib-accordion close-others="oneAtATime">
+    <div uib-accordion-group class="panel-default" heading="Static Header, initially expanded" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+      This content is straight in the template.
+    </div>
+    <div uib-accordion-group class="panel-default" heading="{{group.title}}" ng-repeat="group in groups">
+      {{group.content}}
+    </div>
+    <div uib-accordion-group class="panel-default" heading="Dynamic Body Content">
+      <p>The body of the uib-accordion group grows to fit the contents</p>
+      <button type="button" class="btn btn-default btn-sm" ng-click="addItem()">Add Item</button>
+      <div ng-repeat="item in items">{{item}}</div>
+    </div>
+    <div uib-accordion-group class="panel-default" is-open="status.isCustomHeaderOpen" template-url="group-template.html">
+      <uib-accordion-heading >
+        <div class="container-fluid">
+          <div class="row" style="display: flex; align-items: center;">
+            <div class="col-xs-6">
+            Task næpskrell
+            </div>
+            <div class="col-xs-4">
+              <button class="btn btn-default btn-sm" ng-click="testClick($event)"><span class="glyphicon glyphicon-plus-sign" /></button>
+              <button class="btn btn-default btn-sm" ng-click="testClick($event)"><span class="glyphicon glyphicon-time" /></button>
+              <button class="btn btn-default btn-sm" ng-click="testClick($event)"><span class="glyphicon glyphicon-transfer" /></button>
+              <button class="btn btn-default btn-sm" ng-click="testClick($event)"><span class="glyphicon glyphicon-ok-sign" /></button>
+            </div> 
+            <div class="col-xs-2">      
+            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isCustomHeaderOpen, 'glyphicon-chevron-right': !status.isCustomHeaderOpen}"></i>
+            </div>
+          </div>
+        </div>
+      </uib-accordion-heading>
+      Hello
+    </div>
+    <div uib-accordion-group class="panel-danger" heading="Delete account">
+      <p>Please, to delete your account, click the button below</p>
+      <button class="btn btn-danger">Delete</button>
+    </div>
+    <div uib-accordion-group class="panel-default" is-open="status.open">
+      <uib-accordion-heading>
+        I can have markup, too! <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+      </uib-accordion-heading>
+      This is just some content to illustrate fancy headings.
+    </div>
+  </uib-accordion>
+</div>
+  </body>
+</html>
