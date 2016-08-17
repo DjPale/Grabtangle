@@ -2,27 +2,16 @@ angular.module('grabtangle', ['ngAnimate', 'ui.bootstrap']);
 angular.module('grabtangle').controller('AccordionDemoCtrl', function ($scope, $window) {
   $scope.oneAtATime = true;
 
-  $scope.groups = [
-    {
-      title: 'Dynamic Group Header - 1',
-      content: 'Dynamic Group Body - 1'
-    },
-    {
-      title: 'Dynamic Group Header - 2',
-      content: 'Dynamic Group Body - 2'
-    }
-  ];
-
-  $scope.items = ['Item 1', 'Item 2', 'Item 3'];
-
   $scope.tasks = [
-    { project: "", action: "" }
+    { completed: false, project: "Grabtangle", action: "Test databinding", category: "1", due: new Date("2016-08-17"), waiting: false, isCustomHeaderOpen: false },
+    { completed: false, project: "Raspberry PI", action: "Check network boot stuff (@NoCode)", category: "1", due: new Date("2016-08-25"), waiting: false, isCustomHeaderOpen: false }
   ];
 
-  $scope.addItem = function() {
-    var newItemNo = $scope.items.length + 1;
-    $scope.items.push('Item ' + newItemNo);
-  };
+  $scope.complete = function($event,task)
+  {
+    if (task) task.completed = true;
+    $event.stopPropagation();
+  }
 
   $scope.testClick = function($event) {
     $window.alert("baller!");
@@ -31,7 +20,6 @@ angular.module('grabtangle').controller('AccordionDemoCtrl', function ($scope, $
 
   $scope.status = {
     isCustomHeaderOpen: false,
-    isFirstOpen: true,
     isFirstDisabled: false
   };
 });
