@@ -32,42 +32,66 @@
     </div>
   </script>
 
-  <div class="btn-group btn-group-justified" role="group">
-      <label class="btn btn-success" ng-model="radioModel" uib-btn-radio="'Today'">Today <span class="badge">2</span></label>
-      <label class="btn btn-info" ng-model="radioModel" uib-btn-radio="'Week'">Week <span class="badge">5</span></label>
-      <label class="btn btn-primary" ng-model="radioModel" uib-btn-radio="'Waiting'">Waiting <span class="badge">0</span></label>
-  </div>
-  <!--
-  <ul class="nav nav-pills" role="tablist">
-    <li role="presentation" class="active"><label class="btn btn-primary">Today <span class="badge">2</span></label></li>
-    <li role="presentation"><label class="btn btn-primary">Week <span class="badge">5</span></label></li>
-    <li role="presentation"><label class="btn btn-primary">Waiting <span class="badge">0</span></label></li>
-  </ul>
-  -->
+    <div style="padding: 5px 5px 0px 5px;">
 
-  <uib-accordion close-others="oneAtATime">
-    <div uib-accordion-group class="panel-default" is-open="item.isCustomHeaderOpen" template-url="group-template.html" ng-repeat="task in tasks">
-      <uib-accordion-heading >
-        <div class="container-fluid">
-          <div class="row" style="display: flex; align-items: center;">
-            <div class="col-xs-6">
-            {{task.project}}
+    <div class="btn-group btn-group-justified" role="group">
+        <label class="btn btn-success" ng-model="radioModel" uib-btn-radio="'Today'">Today <span class="badge">2</span></label>
+        <label class="btn btn-info" ng-model="radioModel" uib-btn-radio="'Week'">Week <span class="badge">5</span></label>
+        <label class="btn btn-primary" ng-model="radioModel" uib-btn-radio="'Waiting'">Waiting <span class="badge">0</span></label>
+    </div>
+    <!--
+    <ul class="nav nav-pills" role="tablist">
+      <li role="presentation" class="active"><label class="btn btn-primary">Today <span class="badge">2</span></label></li>
+      <li role="presentation"><label class="btn btn-primary">Week <span class="badge">5</span></label></li>
+      <li role="presentation"><label class="btn btn-primary">Waiting <span class="badge">0</span></label></li>
+    </ul>
+    -->
+    </div>
+
+    <div style="padding: 5px 5px 0px 5px;">
+
+    <uib-accordion close-others="oneAtATime">
+      <div uib-accordion-group class="panel-default" template-url="group-template.html" ng-repeat="task in tasks | filter: {completed: false}">
+        <uib-accordion-heading >
+          <div class="container-fluid">
+            <div class="row" style="display: flex; align-items: center;">
+              <div class="col-xs-6">
+              {{task.project}}  <small>{{task.action | limitTo: 40}}{{task.action.length > 36 ? '...' : ''}}</small>
+              </div>
+              <div class="col-xs-4">
+                <button class="btn btn-default btn-sm" ng-click="newAction($event,task)"><span class="glyphicon glyphicon-plus-sign" /></button>
+                <button class="btn btn-default btn-sm" ng-click="testClick($event)"><span class="glyphicon glyphicon-time" /></button>
+                <button class="btn btn-default btn-sm" ng-click="testClick($event)"><span class="glyphicon glyphicon-transfer" /></button>
+                <button class="btn btn-default btn-sm" ng-click="completeTask($event,task)"><span class="glyphicon glyphicon-ok-sign" /></button>
+              </div> 
+              <div class="col-xs-2">
+              <small>{{task.due | date: 'dd.MM.yy'}}</small>      
+              <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': item.isCustomHeaderOpen, 'glyphicon-chevron-right': !item.isCustomHeaderOpen}"></i>
+              </div>
             </div>
-            <div class="col-xs-4">
-              <button class="btn btn-default btn-sm" ng-click="testClick($event)"><span class="glyphicon glyphicon-plus-sign" /></button>
-              <button class="btn btn-default btn-sm" ng-click="testClick($event)"><span class="glyphicon glyphicon-time" /></button>
-              <button class="btn btn-default btn-sm" ng-click="testClick($event)"><span class="glyphicon glyphicon-transfer" /></button>
-              <button class="btn btn-default btn-sm" ng-click="complete($event,task)"><span class="glyphicon glyphicon-ok-sign" /></button>
-            </div> 
-            <div class="col-xs-2">      
-            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': item.isCustomHeaderOpen, 'glyphicon-chevron-right': !item.isCustomHeaderOpen}"></i>
+          </div>
+        </uib-accordion-heading>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-xs-8">
+              <input type="text" class="form-control" ng-model="task.action" />
+            </div>
+            <div class="col-xs-1">
+              xxx
+            </div>
+            <div class="col-xs-3">
+              <p class="input-group">
+                <input type="text" class="form-control" uib-datepicker-popup ng-model="item.due" is-open="popup2.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar" style="font-size: 16px;"></i></button>
+                </span>
+              </p>
             </div>
           </div>
         </div>
-      </uib-accordion-heading>
-      <span class="pull-left">{{task.action}}</span>
-    </div>
-  </uib-accordion>
-</div>
+      </div>
+    </uib-accordion>
+  </div>
+  </div>
   </body>
 </html>

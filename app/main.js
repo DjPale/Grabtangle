@@ -17,12 +17,12 @@ app.on('window-all-closed', function () {
 app.on('ready', function () {
 
   // Create the browser window.
-  let win = new BrowserWindow({ width: 400, height: 600 });
+  let win = new BrowserWindow({ width: 800, height: 800 });
   // and load the index.html of the app.
   win.loadURL('file://' + __dirname + '/index.html');
 
   // Open the devtools.
-  win.openDevTools();
+  //win.openDevTools();
   // Emitted when the window is closed.
   win.on('closed', function () {
 
