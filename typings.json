@@ -1,0 +1,6 @@
+{
+  "globalDependencies": {
+    "angular-ui-bootstrap": "registry:dt/angular-ui-bootstrap#0.13.3+20160705221453",
+    "node": "registry:dt/node#6.0.0+20160818175514"
+  }
+}

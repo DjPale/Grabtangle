@@ -9,6 +9,7 @@
   "author": "dj_pale",
   "license": "ISC",
   "dependencies": {
+    "angular-datetime-input": "^3.2.2",
     "electron": "^1.3.3"
   }
 }

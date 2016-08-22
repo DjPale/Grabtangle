@@ -1,45 +1,52 @@
 <!DOCTYPE html>
 <html ng-app="grabtangle">
-  <head>
-    <script src="node_modules/angular/angular.js"></script>
-    <script src="node_modules/angular-animate/angular-animate.js"></script>
-    <script src="ui-bootstrap-tpls-2.0.2.js"></script>
-    <script src="index.js"></script>
-    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <meta charset="utf-8">
-    <style>
-      .glyphicon
-      {
-        font-size: 20px;
-      }
-    </style>
-  </head>
-  <body>
 
-<div ng-controller="AccordionDemoCtrl">
-  <script type="text/ng-template" id="group-template.html">
-    <div class="panel-heading">
-      <h4 class="panel-title">
+<head>
+  <script src="node_modules/angular/angular.js"></script>
+  <script src="node_modules/angular-animate/angular-animate.js"></script>
+  <script src="ui-bootstrap-tpls-2.0.2.js"></script>
+  <script src="node_modules/angular-datetime-input/dist/datetime.js"></script>
+  <script src="index.js"></script>
+  <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="utf-8">
+  <style>
+    .glyphicon {
+      font-size: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div ng-controller="AccordionDemoCtrl">
+    <script type="text/ng-template" id="group-template.html">
+      <div class="panel-heading">
+        <h4 class="panel-title">
         <div class="accordion-toggle" style="cursor: pointer" ng-click="toggleOpen()" uib-accordion-transclude="heading">
           <span uib-accordion-header ng-class="{'text-muted': isDisabled}">
             {{heading}}
           </span>
         </div>
       </h4>
-    </div>
-    <div class="panel-collapse collapse" uib-collapse="!isOpen">
-      <div class="panel-body" style="text-align: right" ng-transclude></div>
-    </div>
-  </script>
+      </div>
+      <div class="panel-collapse collapse" uib-collapse="!isOpen">
+        <div class="panel-body" style="text-align: right" ng-transclude></div>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="dropdown.html">
+        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="button-template-url">
+          <li role="menuitem" ng-repeat="d in dates"><a dropdown-toggle ng-click="setNewDate($event,task,d)">{{d.n}} ({{d.d | date: 'dd.MM.yy'}})</a></li>
+        </ul>
+    </script>
 
     <div style="padding: 5px 5px 0px 5px;">
 
-    <div class="btn-group btn-group-justified" role="group">
+      <div class="btn-group btn-group-justified" role="group">
         <label class="btn btn-success" ng-model="radioModel" uib-btn-radio="'Today'">Today <span class="badge">2</span></label>
         <label class="btn btn-info" ng-model="radioModel" uib-btn-radio="'Week'">Week <span class="badge">5</span></label>
         <label class="btn btn-primary" ng-model="radioModel" uib-btn-radio="'Waiting'">Waiting <span class="badge">0</span></label>
-    </div>
-    <!--
+      </div>
+      <!--
     <ul class="nav nav-pills" role="tablist">
       <li role="presentation" class="active"><label class="btn btn-primary">Today <span class="badge">2</span></label></li>
       <li role="presentation"><label class="btn btn-primary">Week <span class="badge">5</span></label></li>
@@ -50,48 +57,49 @@
 
     <div style="padding: 5px 5px 0px 5px;">
 
-    <uib-accordion close-others="oneAtATime">
-      <div uib-accordion-group class="panel-default" template-url="group-template.html" ng-repeat="task in tasks | filter: {completed: false}">
-        <uib-accordion-heading >
-          <div class="container-fluid">
-            <div class="row" style="display: flex; align-items: center;">
-              <div class="col-xs-6">
-              {{task.project}}  <small>{{task.action | limitTo: 40}}{{task.action.length > 36 ? '...' : ''}}</small>
-              </div>
-              <div class="col-xs-4">
-                <button class="btn btn-default btn-sm" ng-click="newAction($event,task)"><span class="glyphicon glyphicon-plus-sign" /></button>
-                <button class="btn btn-default btn-sm" ng-click="testClick($event)"><span class="glyphicon glyphicon-time" /></button>
-                <button class="btn btn-default btn-sm" ng-click="testClick($event)"><span class="glyphicon glyphicon-transfer" /></button>
-                <button class="btn btn-default btn-sm" ng-click="completeTask($event,task)"><span class="glyphicon glyphicon-ok-sign" /></button>
-              </div> 
-              <div class="col-xs-2">
-              <small>{{task.due | date: 'dd.MM.yy'}}</small>      
-              <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': item.isCustomHeaderOpen, 'glyphicon-chevron-right': !item.isCustomHeaderOpen}"></i>
+      <uib-accordion close-others="oneAtATime">
+        <div uib-accordion-group class="panel-default" template-url="group-template.html" ng-repeat="task in tasks | filter: {completed: false}">
+          <uib-accordion-heading>
+            <div class="container-fluid">
+              <div class="row" style="display: flex; align-items: center;">
+                <div class="col-xs-6">
+                  {{task.project}} <small>{{task.action | limitTo: 30}}{{task.action.length > 30 ? '...' : ''}}</small>
+                </div>
+                <div class="col-xs-4">
+                  <button class="btn btn-default btn-sm" ng-click="newAction($event,task)"><span class="glyphicon glyphicon-plus-sign" /></button>
+                  <button class="btn btn-default btn-sm" ng-click="testClick($event)"><span class="glyphicon glyphicon-time" /></button>
+                  <button class="btn btn-default btn-sm" ng-click="testClick($event)"><span class="glyphicon glyphicon-transfer" /></button>
+                  <button class="btn btn-default btn-sm" ng-click="completeTask($event,task)"><span class="glyphicon glyphicon-ok-sign" /></button>
+                </div>
+                <div class="col-xs-2">
+                  <small>{{task.due | date: 'dd.MM.yy'}}</small>
+                  <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': item.isCustomHeaderOpen, 'glyphicon-chevron-right': !item.isCustomHeaderOpen}"></i>
+                </div>
               </div>
             </div>
-          </div>
-        </uib-accordion-heading>
+          </uib-accordion-heading>
         <div class="container-fluid">
           <div class="row">
-            <div class="col-xs-8">
+            <div class="col-xs-9">
               <input type="text" class="form-control" ng-model="task.action" />
             </div>
-            <div class="col-xs-1">
-              xxx
-            </div>
             <div class="col-xs-3">
-              <p class="input-group">
-                <input type="text" class="form-control" uib-datepicker-popup ng-model="item.due" is-open="popup2.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
-                <span class="input-group-btn">
-                  <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar" style="font-size: 16px;"></i></button>
-                </span>
-              </p>
+              <div class="input-group">
+                <div class="input-group-btn" uib-dropdown>
+                  <button id="button-template-url" type="button" class="btn btn-primary dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled">
+                    <span class="glyphicon glyphicon-calendar" /> <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" uib-dropdown-menu template-url="dropdown.html" aria-labelledby="button-template-url">
+                  </ul>
+                </div>
+                <input type="text" class="form-control" datetime="dd.MM.yy" aria-label="Set date" ng-model="task.due">
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </uib-accordion>
+        </div>
+      </uib-accordion>
+    </div>
   </div>
-  </div>
-  </body>
+</body>
 </html>
