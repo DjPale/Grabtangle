@@ -35,7 +35,7 @@
 
     <script type="text/ng-template" id="dropdown.html">
         <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="button-template-url">
-          <li role="menuitem" ng-repeat="d in dates"><a dropdown-toggle ng-click="setNewDate($event,task,d)">{{d.n}} ({{d.d | date: 'dd.MM.yy'}})</a></li>
+          <li role="menuitem" ng-repeat="d in dates"><a dropdown-toggle ng-click="setNewDate($event,task,d); $event.stopPropagation();">{{d.n}} ({{d.d | date: 'dd.MM.yy'}})</a></li>
         </ul>
     </script>
 
@@ -58,7 +58,7 @@
     <div style="padding: 5px 5px 0px 5px;">
 
       <uib-accordion close-others="oneAtATime">
-        <div uib-accordion-group class="panel-default" template-url="group-template.html" ng-repeat="task in tasks | filter: {completed: false}">
+        <div uib-accordion-group class="panel-default" template-url="group-template.html" is-open="task.isOpen" ng-repeat="task in tasks | filter: {completed: false}">
           <uib-accordion-heading>
             <div class="container-fluid">
               <div class="row" style="display: flex; align-items: center;">
@@ -67,13 +67,19 @@
                 </div>
                 <div class="col-xs-4">
                   <button class="btn btn-default btn-sm" ng-click="newAction($event,task)"><span class="glyphicon glyphicon-plus-sign" /></button>
-                  <button class="btn btn-default btn-sm" ng-click="testClick($event)"><span class="glyphicon glyphicon-time" /></button>
-                  <button class="btn btn-default btn-sm" ng-click="testClick($event)"><span class="glyphicon glyphicon-transfer" /></button>
+                  <!-- <button class="btn btn-default btn-sm" ng-click="testClick($event,task)"><span class="glyphicon glyphicon-time" /></button> -->
+                  <span class="btn-group" uib-dropdown>
+                    <button id="button-template-url" type="button" class="btn btn-default btn-sm dropdown-toggle" uib-dropdown-toggle ng-click="$event.stopPropagation()">
+                      <span class="glyphicon glyphicon-time"/><span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" uib-dropdown-menu template-url="dropdown.html" aria-labelledby="button-template-url"></ul>
+                  </span>
+                  <button class="btn btn-default btn-sm" ng-click="testClick($event,task)"><span class="glyphicon glyphicon-transfer" /></button>
                   <button class="btn btn-default btn-sm" ng-click="completeTask($event,task)"><span class="glyphicon glyphicon-ok-sign" /></button>
                 </div>
                 <div class="col-xs-2">
                   <small>{{task.due | date: 'dd.MM.yy'}}</small>
-                  <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': item.isCustomHeaderOpen, 'glyphicon-chevron-right': !item.isCustomHeaderOpen}"></i>
+                  <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': task.isOpen, 'glyphicon-chevron-right': !task.isOpen}"></i>
                 </div>
               </div>
             </div>
@@ -81,13 +87,13 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-xs-9">
-              <input type="text" class="form-control" ng-model="task.action" />
+              <input type="text" class="form-control" ng-model="task.action" auto-focus="{{ task.isOpen }}" />
             </div>
             <div class="col-xs-3">
               <div class="input-group">
                 <div class="input-group-btn" uib-dropdown>
-                  <button id="button-template-url" type="button" class="btn btn-primary dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled">
-                    <span class="glyphicon glyphicon-calendar" /> <span class="caret"></span>
+                  <button id="button-template-url" type="button" class="btn btn-primary dropdown-toggle" uib-dropdown-toggle>
+                    <span class="glyphicon glyphicon-calendar" style="font-size: unset" /><span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu" uib-dropdown-menu template-url="dropdown.html" aria-labelledby="button-template-url">
                   </ul>
