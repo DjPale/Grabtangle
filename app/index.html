@@ -4,7 +4,7 @@
 <head>
   <script src="node_modules/angular/angular.js"></script>
   <script src="node_modules/angular-animate/angular-animate.js"></script>
-  <script src="ui-bootstrap-tpls-2.0.2.js"></script>
+  <script src="node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
   <script src="node_modules/angular-datetime-input/dist/datetime.js"></script>
   <script src="index.js"></script>
   <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -42,9 +42,10 @@
     <div style="padding: 5px 5px 0px 5px;">
 
       <div class="btn-group btn-group-justified" role="group">
-        <label class="btn btn-success" ng-model="radioModel" uib-btn-radio="'Today'">Today <span class="badge">2</span></label>
-        <label class="btn btn-info" ng-model="radioModel" uib-btn-radio="'Week'">Week <span class="badge">5</span></label>
-        <label class="btn btn-primary" ng-model="radioModel" uib-btn-radio="'Waiting'">Waiting <span class="badge">0</span></label>
+        <label class="btn btn-success" ng-model="radioModel" uib-btn-radio="'Today'" ng-click="activeFilter='Today'">Today <span class="badge">{{ filterCount['Today'] }}</span></label>
+        <label class="btn btn-info" ng-model="radioModel" uib-btn-radio="'Week'" ng-click="activeFilter='Week'">Week <span class="badge">{{ filterCount['Week'] }}</span></label>
+        <label class="btn btn-primary" ng-model="radioModel" uib-btn-radio="'Waiting'" ng-click="activeFilter='Waiting'">Waiting <span class="badge">{{ filterCount['Waiting'] }}</span></label>
+        <label class="btn btn-default" ng-model="radioModel" uib-btn-radio="'All'" ng-click="activeFilter='All'">All <span class="badge">{{ filterCount['All'] }}</span></label>
       </div>
       <!--
     <ul class="nav nav-pills" role="tablist">
@@ -58,7 +59,7 @@
     <div style="padding: 5px 5px 0px 5px;">
 
       <uib-accordion close-others="oneAtATime">
-        <div uib-accordion-group class="panel-default" template-url="group-template.html" is-open="task.isOpen" ng-repeat="task in tasks | filter: {completed: false}">
+        <div uib-accordion-group class="panel-default" template-url="group-template.html" is-open="task.isOpen" ng-repeat="task in tasks | filter: filterCategory()">
           <uib-accordion-heading>
             <div class="container-fluid">
               <div class="row" style="display: flex; align-items: center;">
@@ -74,7 +75,7 @@
                     </button>
                     <ul class="dropdown-menu" uib-dropdown-menu template-url="dropdown.html" aria-labelledby="button-template-url"></ul>
                   </span>
-                  <button class="btn btn-default btn-sm" ng-click="testClick($event,task)"><span class="glyphicon glyphicon-transfer" /></button>
+                  <button class="btn btn-default btn-sm" ng-click="waitTask($event,task)"><span class="glyphicon glyphicon-transfer" /></button>
                   <button class="btn btn-default btn-sm" ng-click="completeTask($event,task)"><span class="glyphicon glyphicon-ok-sign" /></button>
                 </div>
                 <div class="col-xs-2">
