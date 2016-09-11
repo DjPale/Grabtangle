@@ -1,47 +1,48 @@
 angular.module('grabtangle', ['ngAnimate', 'ui.bootstrap', 'datetime']);
-angular.module('grabtangle').controller('AccordionDemoCtrl', function ($scope, $window) 
+angular.module('grabtangle').controller('GrabtangleMainController', function ($scope, $window, $timeout) 
 {
+  var vm = $scope;
   const DAY_ADD = 86400000;
 
   generateDates();
 
-  $scope.oneAtATime = true;
+  vm.oneAtATime = true;
 
-  $scope.tasks = 
+  vm.tasks = 
   [
-    { completed: false, project: 'Grabtangle', action: 'Test databinding', category: '1', due: new Date('2016-09-06'), waiting: false, isOpen: false },
-    { completed: false, project: 'Raspberry PI', action: 'Check network boot stuff (@NoCode)', category: '1', due: new Date('2016-08-25'), waiting: false, isOpen: false }
+    { ui_state: { isOpen: false, date_open: false, cal_open: false }, completed: false, project: 'Grabtangle', action: 'Test databinding', category: '1', due: new Date('2016-09-06'), waiting: false },
+    { ui_state: { isOpen: false, date_open: false, cal_open: false }, completed: false, project: 'Raspberry PI', action: 'Check network boot stuff (@NoCode)', category: '1', due: new Date('2016-08-25'), waiting: false }
   ];
 
-  $scope.test = [];
+  vm.test = [];
 
-  $scope.filterCount = { 'Today': 0, 'Week': 0, 'Waiting': 0, 'All': 0 };
+  vm.filterCount = { 'Today': 0, 'Week': 0, 'Waiting': 0, 'All': 0 };
 
-  $scope.activeFilter = 'Today';
-  $scope.filter = [];
-  $scope.filter['Today'] = function(item)
+  vm.activeFilter = 'Today';
+  vm.filter = [];
+  vm.filter['Today'] = function(item)
   {
-    return (item.completed == false && item.waiting == false && item.due < $scope.dates[1].d);
+    return (item.completed == false && item.waiting == false && item.due < vm.dates[1].d);
   };
 
-  $scope.filter['Week'] = function(item)
+  vm.filter['Week'] = function(item)
   {
-    return (item.completed == false && item.waiting == false && item.due < $scope.dates[3].d);
+    return (item.completed == false && item.waiting == false && item.due >= vm.dates[1].d && item.due < vm.dates[3].d);
   };
 
-  $scope.filter['Waiting'] = function(item)
+  vm.filter['Waiting'] = function(item)
   {
     return (item.completed == false && item.waiting == true);
   };
   
-  $scope.filter['All'] = function(item)
+  vm.filter['All'] = function(item)
   {
     return (item.completed == false);
   };
 
-  $scope.filterCategory = function()
+  vm.filterCategory = function()
   {
-    return $scope.filter[$scope.activeFilter];
+    return vm.filter[vm.activeFilter];
   };
 
   refreshCount();
@@ -74,27 +75,26 @@ angular.module('grabtangle').controller('AccordionDemoCtrl', function ($scope, $
     let twoweeks = new Date(today.valueOf());
     twoweeks.setTime(twoweeks.valueOf() + 14 * DAY_ADD); 
 
-    $scope.dates = [];
-    $scope.dates.push({ n: 'Today', d: today});
-    $scope.dates.push({ n: 'Tomorrow', d: tomorrow});
-    $scope.dates.push({ n: 'Weekend', d: weekend});
-    $scope.dates.push({ n: 'Next week', d: nextweek});
-    $scope.dates.push({ n: '2 weeks', d: twoweeks});
+    vm.dates = [];
+    vm.dates.push({ n: 'Today', d: today});
+    vm.dates.push({ n: 'Tomorrow', d: tomorrow});
+    vm.dates.push({ n: 'Weekend', d: weekend});
+    vm.dates.push({ n: 'Next week', d: nextweek});
+    vm.dates.push({ n: '2 weeks', d: twoweeks});
   }
-
 
   function refreshCount()
   {
-    angular.forEach(Object.keys($scope.filter), function(key)
+    angular.forEach(Object.keys(vm.filter), function(key)
     {
-      $scope.filterCount[key] = 0;
+      vm.filterCount[key] = 0;
     });
 
-    angular.forEach($scope.tasks, function(item)
+    angular.forEach(vm.tasks, function(item)
     {
-      angular.forEach(Object.keys($scope.filter), function(key)
+      angular.forEach(Object.keys(vm.filter), function(key)
       {
-        if ($scope.filter[key](item)) $scope.filterCount[key]++;
+        if (vm.filter[key](item)) vm.filterCount[key]++;
       });
     });
   }
@@ -103,7 +103,7 @@ angular.module('grabtangle').controller('AccordionDemoCtrl', function ($scope, $
   {
     if (task)
     {
-      undo_obj = { completed: task.completed, project: task.project, action: task.action, category: task.category, due: new Date(task.valueOf()), waiting: task.waiting, isOpen: task.isOpen};
+      undo_obj = { completed: task.completed, project: task.project, action: task.action, category: task.category, due: new Date(task.valueOf()), waiting: task.waiting };
     }
   }
 
@@ -116,16 +116,19 @@ angular.module('grabtangle').controller('AccordionDemoCtrl', function ($scope, $
     }
   }
   
-  $scope.setNewDate = function($event,task,d)
+  vm.setNewDate = function($event,task,d,ui_state_name)
   {
     if (task)
     {
       task.due = d.d;
+      task.ui_state[ui_state_name] = false;
+      $event.preventDefault();
+      $event.stopPropagation();
       refreshCount();
     }
   };
 
-  $scope.completeTask = function($event,task)
+  vm.completeTask = function($event,task)
   {
     if (task)
     { 
@@ -135,11 +138,11 @@ angular.module('grabtangle').controller('AccordionDemoCtrl', function ($scope, $
     $event.stopPropagation();
   };
 
-  $scope.newAction = function($event,task)
+  vm.newAction = function($event,task)
   {
     if (task)
     {
-      task.isOpen = true;
+      task.ui_state.isOpen = true;
       setUndo(task);
       task.action = '';
       refreshCount();
@@ -147,7 +150,7 @@ angular.module('grabtangle').controller('AccordionDemoCtrl', function ($scope, $
     $event.stopPropagation();
   };
 
-  $scope.waitTask = function($event,task)
+  vm.waitTask = function($event,task)
   {
     if (task)
     {
@@ -158,18 +161,7 @@ angular.module('grabtangle').controller('AccordionDemoCtrl', function ($scope, $
     $event.stopPropagation();
   };
 })
-/*
-.directive('autoFocus', function($timeout) {
-    return {
-        restrict: 'AC',
-        link: function(_scope, _element) {
-            $timeout(function() {
-                _element[0].focus();
-            });
-        }
-    };
-});
-*/
+// dunno where to put these kind of things yet /:-[
 .directive('autoFocus', function($timeout) {
     return {
         link: function (scope, element, attrs) {
