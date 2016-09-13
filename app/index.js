@@ -20,6 +20,12 @@ angular.module('grabtangle').controller('GrabtangleMainController', function ($s
 
   vm.activeFilter = 'Today';
   vm.filter = [];
+
+  vm.filter['Overdue'] = function(item)
+  {
+    return (item.completed == false && item.due < vm.dates[0].d);
+  };
+
   vm.filter['Today'] = function(item)
   {
     return (item.completed == false && item.waiting == false && item.due < vm.dates[1].d);

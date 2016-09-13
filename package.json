@@ -1,0 +1,26 @@
+{
+  "name": "grabtangle-dev",
+  "version": "0.0.1",
+  "description": "Grabtangle dev dir",
+  "main": "gulpfile.js",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint-config-angular": "^0.5.0",
+    "gulp": "^3.9.1",
+    "gulp-cli": "^1.2.2",
+    "eslint-plugin-angular": "^1.3.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DjPale/Grabtangle.git"
+  },
+  "author": "dj_pale",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DjPale/Grabtangle/issues"
+  },
+  "homepage": "https://github.com/DjPale/Grabtangle#readme"
+}

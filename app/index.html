@@ -55,7 +55,6 @@
                 </div>
                 <div class="col-xs-4">
                   <button class="btn btn-default btn-sm" ng-click="newAction($event,task)"><span class="glyphicon glyphicon-edit" /></button>
-                  <!-- <button class="btn btn-default btn-sm" ng-click="testClick($event,task)"><span class="glyphicon glyphicon-time" /></button> -->
                   <span class="btn-group" uib-dropdown is-open="task.ui_state.date_open">
                     <button id="button-template-url" type="button" class="btn btn-default btn-sm dropdown-toggle" uib-dropdown-toggle ng-click="$event.stopPropagation()">
                       <span class="glyphicon glyphicon-time"/><span class="caret"></span>
@@ -68,7 +67,7 @@
                   <button class="btn btn-default btn-sm" ng-click="completeTask($event,task)"><span class="glyphicon glyphicon-ok-sign" /></button>
                 </div>
                 <div class="col-xs-2">
-                  <span class="label" ng-class="{'label-danger': (task.due < dates[0].d), 'label-success': (!task.waiting && task.due == dates[0].d), 'label-info': (!task.waiting && task.due >= dates[1].d), 'label-primary': task.waiting}">{{task.due | date: 'dd.MM.yy'}}</span>
+                  <span class="label" ng-class="{'label-danger': filter.Overdue(task), 'label-success': filter.Today(task), 'label-info': filter.Week(task), 'label-primary': filter.Waiting(task)}">{{task.due | date: 'dd.MM.yy'}}</span>
                   <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': task.ui_state.isOpen, 'glyphicon-chevron-right': !task.ui_state.isOpen}"></i>
                 </div>
               </div>
@@ -76,13 +75,16 @@
           </uib-accordion-heading>
         <div class="container-fluid">
           <div class="row">
-            <div class="col-xs-9">
+            <div class="col-xs-3">
+              <input type="text" class="form-control" ng-model="task.project" uib-typeahead="task.project as task.project for task in tasks | filter:{project:$viewValue} | limitTo:8" />
+            </div>
+            <div class="col-xs-6">
               <input type="text" class="form-control" ng-model="task.action" auto-focus="{{ task.ui_state.isOpen }}" />
             </div>
             <div class="col-xs-3">
               <div class="input-group">
                 <div class="input-group-btn" uib-dropdown is-open="task.ui_state.cal_open">
-                  <button id="button-template-url" type="button" class="btn btn-primary dropdown-toggle" uib-dropdown-toggle>
+                  <button id="button-template-url" type="button" class="btn btn-default dropdown-toggle" uib-dropdown-toggle>
                     <span class="glyphicon glyphicon-calendar" style="font-size: unset" /><span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="button-template-url">
