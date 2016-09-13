@@ -1,6 +1,8 @@
 angular.module('grabtangle', ['ngAnimate', 'ui.bootstrap', 'datetime']);
 angular.module('grabtangle').controller('GrabtangleMainController', function ($scope, $window, $timeout) 
 {
+  const remote = require('electron').remote;
+
   var vm = $scope;
   const DAY_ADD = 86400000;
 
@@ -14,7 +16,9 @@ angular.module('grabtangle').controller('GrabtangleMainController', function ($s
     { ui_state: { isOpen: false, date_open: false, cal_open: false }, completed: false, project: 'Raspberry PI', action: 'Check network boot stuff (@NoCode)', category: '1', due: new Date('2016-08-25'), waiting: false }
   ];
 
-  vm.test = [];
+  vm.newTask = {};
+
+  vm.searchField = '';
 
   vm.filterCount = { 'Today': 0, 'Week': 0, 'Waiting': 0, 'All': 0 };
 
@@ -48,7 +52,18 @@ angular.module('grabtangle').controller('GrabtangleMainController', function ($s
 
   vm.filterCategory = function()
   {
-    return vm.filter[vm.activeFilter];
+    return function(value) {
+      // TODO: optimize!
+      if (vm.searchField != '')
+      {
+        let sf = vm.searchField.toLowerCase();
+        return (value.action.toLowerCase().indexOf(sf) != -1 || value.project.toLowerCase().indexOf(sf) != -1) && vm.filter[vm.activeFilter](value);
+      }
+      else
+      {
+        return vm.filter[vm.activeFilter](value);
+      }
+    };
   };
 
   refreshCount();
@@ -165,6 +180,20 @@ angular.module('grabtangle').controller('GrabtangleMainController', function ($s
       refreshCount();
     }
     $event.stopPropagation();
+  };
+
+  vm.winMinimize = function()
+  {
+    var electronWindow = remote.getCurrentWindow();
+    if (!electronWindow.isMinimized()) {
+        electronWindow.minimize();     
+    }     
+  };
+
+  vm.winClose = function()
+  {
+    var electronWindow = remote.getCurrentWindow();
+    electronWindow.close();
   };
 })
 // dunno where to put these kind of things yet /:-[

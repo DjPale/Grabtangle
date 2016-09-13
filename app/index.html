@@ -10,8 +10,17 @@
   <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
   <meta charset="utf-8">
   <style>
-    .glyphicon {
+    .icon-big {
       font-size: 20px;
+    }
+    .btn-ctrl {
+      border: none;
+    }
+    body { 
+      padding-top: 90px; 
+    }
+    html {
+      overflow-y: scroll;
     }
   </style>
 </head>
@@ -33,20 +42,44 @@
       </div>
     </script>
 
-    <div style="padding: 5px 5px 0px 5px;">
+    <script type="text/ng-template" id="addpopup.html">
+      <div>New Task</div>
+        <div class="form-group">
+          <label>Project</label>
+          <input type="text" ng-model="newTask.project" class="form-control">
+          <label>Actoin</label>
+          <input type="text" ng-model="newTask.action" class="form-control">
+        </div>
+    </script>
+
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Grabtangle</a>
+        </div>
+
+        <button type="button" class="btn btn-default navbar-btn navbar-left" uib-popover-template="addpopup.html" popover-placement="right"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+
+        <form class="navbar-form navbar-left" role="search">
+          <input type="text" class="form-control" placeholder="Search..." ng-model="searchField" />
+        </form>
+        <label class="btn btn-default navbar-btn navbar-right btn-ctrl" ng-click="winClose()"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></label>
+        <label class="btn btn-default navbar-btn navbar-right btn-ctrl" ng-click="winMinimize()"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></label>
+      </div>
+          <div style="padding: 5px 5px 0px 5px;">
 
       <div class="btn-group btn-group-justified" role="group">
-        <label class="btn btn-success" ng-model="radioModel" uib-btn-radio="'Today'" ng-click="activeFilter='Today'">Today <span class="badge">{{ filterCount['Today'] }}</span></label>
-        <label class="btn btn-info" ng-model="radioModel" uib-btn-radio="'Week'" ng-click="activeFilter='Week'">Week <span class="badge">{{ filterCount['Week'] }}</span></label>
-        <label class="btn btn-primary" ng-model="radioModel" uib-btn-radio="'Waiting'" ng-click="activeFilter='Waiting'">Waiting <span class="badge">{{ filterCount['Waiting'] }}</span></label>
-        <label class="btn btn-default" ng-model="radioModel" uib-btn-radio="'All'" ng-click="activeFilter='All'">All <span class="badge">{{ filterCount['All'] }}</span></label>
+        <label class="btn btn-success" ng-model="activeFilter" uib-btn-radio="'Today'">Today <span class="badge">{{ filterCount['Today'] }}</span></label>
+        <label class="btn btn-info" ng-model="activeFilter" uib-btn-radio="'Week'">Week <span class="badge">{{ filterCount['Week'] }}</span></label>
+        <label class="btn btn-primary" ng-model="activeFilter" uib-btn-radio="'Waiting'">Waiting <span class="badge">{{ filterCount['Waiting'] }}</span></label>
+        <label class="btn btn-default" ng-model="activeFilter" uib-btn-radio="'All'">All <span class="badge">{{ filterCount['All'] }}</span></label>
       </div>
     </div>
+    </nav>
 
     <div style="padding: 5px 5px 0px 5px;">
-
       <uib-accordion close-others="oneAtATime">
-        <div uib-accordion-group class="panel-default" template-url="group-template.html" is-open="task.ui_state.isOpen" ng-repeat="task in tasks | filter: filterCategory()">
+        <div uib-accordion-group class="panel-default" template-url="group-template.html" is-open="task.ui_state.isOpen" ng-repeat="task in tasks | filter:filterCategory()">
           <uib-accordion-heading>
             <div class="container-fluid">
               <div class="row" style="display: flex; align-items: center;">
@@ -54,21 +87,22 @@
                   {{task.project}} <small>{{task.action | limitTo: 30}}{{task.action.length > 30 ? '...' : ''}}</small>
                 </div>
                 <div class="col-xs-4">
-                  <button class="btn btn-default btn-sm" ng-click="newAction($event,task)"><span class="glyphicon glyphicon-edit" /></button>
+                  <button class="btn btn-default btn-sm" ng-click="newAction($event,task)"><span class="glyphicon glyphicon-edit icon-big" /></button>
                   <span class="btn-group" uib-dropdown is-open="task.ui_state.date_open">
                     <button id="button-template-url" type="button" class="btn btn-default btn-sm dropdown-toggle" uib-dropdown-toggle ng-click="$event.stopPropagation()">
-                      <span class="glyphicon glyphicon-time"/><span class="caret"></span>
+                      <span class="glyphicon glyphicon-time icon-big"/><span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="button-template-url">
                       <li role="menuitem" ng-repeat="d in dates"><a ng-click="setNewDate($event,task,d,'date_open')">{{d.n}} ({{d.d | date: 'dd.MM.yy'}})</a></li>
                     </ul>
                   </span>
-                  <button class="btn btn-default btn-sm" ng-click="waitTask($event,task)"><span class="glyphicon glyphicon-transfer" /></button>
-                  <button class="btn btn-default btn-sm" ng-click="completeTask($event,task)"><span class="glyphicon glyphicon-ok-sign" /></button>
+                  <button class="btn btn-default btn-sm" ng-click="waitTask($event,task)"><span class="glyphicon glyphicon-transfer icon-big" /></button>
+                  <button class="btn btn-default btn-sm" ng-click="completeTask($event,task)"><span class="glyphicon glyphicon-ok-sign icon-big" /></button>
+                     <button type="button" class="btn btn-default icon-big" uib-popover-template="addpopup.html" popover-title="balalaika" popover-trigger="'mouseenter'" popover-placement="right">NOT WORKING</button>
                 </div>
                 <div class="col-xs-2">
                   <span class="label" ng-class="{'label-danger': filter.Overdue(task), 'label-success': filter.Today(task), 'label-info': filter.Week(task), 'label-primary': filter.Waiting(task)}">{{task.due | date: 'dd.MM.yy'}}</span>
-                  <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': task.ui_state.isOpen, 'glyphicon-chevron-right': !task.ui_state.isOpen}"></i>
+                  <i class="pull-right glyphicon icon-big" ng-class="{'glyphicon-chevron-down': task.ui_state.isOpen, 'glyphicon-chevron-right': !task.ui_state.isOpen}"></i>
                 </div>
               </div>
             </div>
@@ -76,7 +110,7 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-xs-3">
-              <input type="text" class="form-control" ng-model="task.project" uib-typeahead="task.project as task.project for task in tasks | filter:{project:$viewValue} | limitTo:8" />
+              <input type="text" class="form-control" ng-model="task.project" uib-typeahead="task.project as task.project for task in tasks | filter:{project:$viewValue}" />
             </div>
             <div class="col-xs-6">
               <input type="text" class="form-control" ng-model="task.action" auto-focus="{{ task.ui_state.isOpen }}" />
@@ -85,7 +119,7 @@
               <div class="input-group">
                 <div class="input-group-btn" uib-dropdown is-open="task.ui_state.cal_open">
                   <button id="button-template-url" type="button" class="btn btn-default dropdown-toggle" uib-dropdown-toggle>
-                    <span class="glyphicon glyphicon-calendar" style="font-size: unset" /><span class="caret"></span>
+                    <span class="glyphicon glyphicon-calendar"/><span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="button-template-url">
                     <li role="menuitem" ng-repeat="d in dates"><a ng-click="setNewDate($event,task,d,'cal_open')">{{d.n}} ({{d.d | date: 'dd.MM.yy'}})</a></li>
