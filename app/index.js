@@ -12,11 +12,11 @@ angular.module('grabtangle').controller('GrabtangleMainController', function ($s
 
   vm.tasks = 
   [
-    { ui_state: { isOpen: false, date_open: false, cal_open: false }, completed: false, project: 'Grabtangle', action: 'Test databinding', category: '1', due: new Date('2016-09-06'), waiting: false },
-    { ui_state: { isOpen: false, date_open: false, cal_open: false }, completed: false, project: 'Raspberry PI', action: 'Check network boot stuff (@NoCode)', category: '1', due: new Date('2016-08-25'), waiting: false }
+    { ui_state: { isOpen: false, date_open: false, cal_open: false }, completed: false, project: 'Grabtangle', action: 'Test databinding', due: new Date('2016-09-06'), waiting: false },
+    { ui_state: { isOpen: false, date_open: false, cal_open: false }, completed: false, project: 'Raspberry PI', action: 'Check network boot stuff (@NoCode)', due: new Date('2016-08-25'), waiting: false }
   ];
 
-  vm.newTask = {};
+  vm.newTask = { ui_state: { isOpen: false, date_open: false, cal_open: false }, project: '', action: '', due: new Date(), completed: false, waiting: false };
 
   vm.searchField = '';
 
@@ -180,6 +180,27 @@ angular.module('grabtangle').controller('GrabtangleMainController', function ($s
       refreshCount();
     }
     $event.stopPropagation();
+  };
+
+  function clearNewTask()
+  {
+    vm.newTask.project = '';
+    vm.newTask.action = '';
+    vm.newTask.due = new Date();   
+    vm.newTask.ui_state.isOpen = false;
+  }
+
+  vm.addTask = function()
+  {    
+    if (newTask.action == '') return;
+    vm.tasks.push({ ui_state: { isOpen: false, date_open: false, cal_open: false }, project: vm.newTask.project, action: vm.newTask.action, due: new Date(vm.newTask.due.valueOf()), completed: false, waiting: false });
+    clearNewTask();
+    refreshCount();
+  };
+
+  vm.clearTask = function()
+  {
+    clearNewTask();
   };
 
   vm.winMinimize = function()
