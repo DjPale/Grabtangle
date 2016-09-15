@@ -7,6 +7,7 @@
   <script src="node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
   <script src="node_modules/angular-datetime-input/dist/datetime.js"></script>
   <script src="index.js"></script>
+  <script src="components/data-service/data-service.js"></script>
   <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
   <meta charset="utf-8">
   <style>
@@ -49,52 +50,13 @@
       </div>
     </script>
 
-    <script type="text/ng-template" id="addpopup.html">
-    <form class="form-horizontal">
-      <div class="form-group">
-        <label for="newTaskProject" class="col-xs-2 control-label">Project</label>
-        <div class="col-xs-5">
-          <input id="newTaskProject" type="text" class="form-control" auto-focus="{{ newTask.ui_state.isOpen }}" ng-model="newTask.project" uib-typeahead="task.project as task.project for task in tasks | filter:{project:$viewValue}" />
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="newTaskAction" class="col-xs-2 control-label">Action</label>
-        <div class="col-xs-10">
-          <input id="newTaskAction" type="text" class="form-control" ng-model="newTask.action" />
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="newTaskDue" class="col-xs-2 control-label">Due</label>
-        <div class="col-xs-4">
-        <div class="input-group">
-          <div class="input-group-btn" uib-dropdown is-open="newTask.ui_state.cal_open">
-            <button id="button-template-url" type="button" class="btn btn-default dropdown-toggle" uib-dropdown-toggle>
-            <span class="glyphicon glyphicon-calendar"/><span class="caret"></span>
-          </button>
-            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="button-template-url">
-              <li role="menuitem" ng-repeat="d in dates"><a ng-click="setNewDate($event,newTask,d,'cal_open')">{{d.n}} ({{d.d | date: 'dd.MM.yy'}})</a></li>
-            </ul>
-          </div>
-          <input id="newTaskDue" type="text" class="form-control" datetime="dd.MM.yy" aria-label="Set date" ng-model="newTask.due">
-        </div>
-        </div>
-        <div class="col-xs-2 col-xs-offset-2">
-          <button type="button" class="btn btn-success" ng-click="addTask()">Add Task</button>
-        </div>
-        <div class="col-xs-2">
-          <button type="button" class="btn btn-danger" ng-click="clearTask()">Clear</button>
-        </div>
-      </div>
-    </form>
-    </script>
-
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
           <a class="navbar-brand" href="#">Grabtangle</a>
         </div>
 
-        <button type="button" uib-btn-checkbox ng-model="newTask.ui_state.isOpen" class="btn btn-default navbar-btn navbar-left" uib-popover-template="'addpopup.html'" popover-placement="bottom-left" popover-title="New task" popover-is-open="newTask.ui_state.isOpen">
+        <button type="button" uib-btn-checkbox ng-model="newTask.ui_state.isOpen" class="btn btn-default navbar-btn navbar-left" uib-popover-template="'templates/add-popup.html'" popover-placement="bottom-left" popover-title="New task" popover-is-open="newTask.ui_state.isOpen">
           <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         </button>
 

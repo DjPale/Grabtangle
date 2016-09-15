@@ -1,0 +1,36 @@
+<form class="form-horizontal">
+    <div class="form-group">
+    <label for="newTaskProject" class="col-xs-2 control-label">Project</label>
+    <div class="col-xs-5">
+        <input id="newTaskProject" type="text" class="form-control" auto-focus="{{ newTask.ui_state.isOpen }}" ng-model="newTask.project" uib-typeahead="task.project as task.project for task in tasks | filter:{project:$viewValue}" />
+    </div>
+    </div>
+    <div class="form-group">
+    <label for="newTaskAction" class="col-xs-2 control-label">Action</label>
+    <div class="col-xs-10">
+        <input id="newTaskAction" type="text" class="form-control" ng-model="newTask.action" />
+    </div>
+    </div>
+    <div class="form-group">
+    <label for="newTaskDue" class="col-xs-2 control-label">Due</label>
+    <div class="col-xs-4">
+    <div class="input-group">
+        <div class="input-group-btn" uib-dropdown is-open="newTask.ui_state.cal_open">
+        <button id="button-template-url" type="button" class="btn btn-default dropdown-toggle" uib-dropdown-toggle>
+        <span class="glyphicon glyphicon-calendar"/><span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="button-template-url">
+            <li role="menuitem" ng-repeat="d in dates"><a ng-click="setNewDate($event,newTask,d,'cal_open')">{{d.n}} ({{d.d | date: 'dd.MM.yy'}})</a></li>
+        </ul>
+        </div>
+        <input id="newTaskDue" type="text" class="form-control" datetime="dd.MM.yy" aria-label="Set date" ng-model="newTask.due">
+    </div>
+    </div>
+    <div class="col-xs-2 col-xs-offset-2">
+        <button type="button" class="btn btn-success" ng-click="addTask()">Add Task</button>
+    </div>
+    <div class="col-xs-2">
+        <button type="button" class="btn btn-danger" ng-click="clearTask()">Clear</button>
+    </div>
+    </div>
+</form>

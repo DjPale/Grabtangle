@@ -44,11 +44,18 @@ app.on('ready', function () {
 
   const contextMenu = Menu.buildFromTemplate([
     {
-      role: "quit"
-    },
-    {
       label: 'Quick add task',
       click: showTrayWindow
+    },
+    {
+      type: 'separator'
+    },
+    {
+      label: 'Quit',
+      click: function()
+      {
+        win.close();
+      }
     }
   ]);
 
@@ -58,7 +65,12 @@ app.on('ready', function () {
   appIcon.setToolTip('Grabtangle');
   appIcon.setContextMenu(contextMenu);
 
-  trayWin = new BrowserWindow({ width: 555, height: 256, frame: false, transparent: false, show: false, resizable: false, alwaysOnTop: true })
+  trayWin = new BrowserWindow({
+     width: 555, height: 200, frame: false, show: false, 
+     resizable: false, alwaysOnTop: true, skipTaskbar: true });
+  //trayWin.setMenu(null);
+
+  trayWin.loadURL('file://' + __dirname + '/components/tray-popup/tray-popup.html');
 
   // Open the devtools.
   //win.openDevTools();

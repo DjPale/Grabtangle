@@ -1,5 +1,5 @@
 angular.module('grabtangle', ['ngAnimate', 'ui.bootstrap', 'datetime']);
-angular.module('grabtangle').controller('GrabtangleMainController', function ($scope, $window, $timeout) 
+angular.module('grabtangle').controller('GrabtangleMainController', ['DataService', '$scope', '$window', '$timeout', function($scope, $window, $timeout) 
 {
   const remote = require('electron').remote;
 
@@ -10,11 +10,7 @@ angular.module('grabtangle').controller('GrabtangleMainController', function ($s
 
   vm.oneAtATime = true;
 
-  vm.tasks = 
-  [
-    { ui_state: { isOpen: false, date_open: false, cal_open: false }, completed: false, project: 'Grabtangle', action: 'Test databinding', due: new Date('2016-09-06'), waiting: false },
-    { ui_state: { isOpen: false, date_open: false, cal_open: false }, completed: false, project: 'Raspberry PI', action: 'Check network boot stuff (@NoCode)', due: new Date('2016-08-25'), waiting: false }
-  ];
+  vm.tasks = getTasks();
 
   vm.newTask = { ui_state: { isOpen: false, date_open: false, cal_open: false }, project: '', action: '', due: new Date(), completed: false, waiting: false };
 
@@ -216,7 +212,7 @@ angular.module('grabtangle').controller('GrabtangleMainController', function ($s
     var electronWindow = remote.getCurrentWindow();
     electronWindow.close();
   };
-})
+}])
 // dunno where to put these kind of things yet /:-[
 .directive('autoFocus', function($timeout) {
     return {

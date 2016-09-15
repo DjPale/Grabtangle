@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html ng-app="grabtangle">
+
+<head>
+  <script src="../../node_modules/angular/angular.js"></script>
+  <script src="../../node_modules/angular-animate/angular-animate.js"></script>
+  <script src="../../node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
+  <script src="../../node_modules/angular-datetime-input/dist/datetime.js"></script>
+  <script src="tray-popup.js"></script>
+  <link href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="utf-8">
+  <style> 
+    .outer-frame {
+      max-width: 550px;
+      width: 550px;
+  </style>
+</head>
+
+<body>
+  <div ng-controller="TrayPopupController">
+    <div class="outer-frame">
+      <div class="popover-inner">
+        <h3 class="popover-title">New task</h3>
+         <div class="popover-content" ng-include="'../../templates/add-popup.html'" />
+      </div>
+    </div>
+  </div>
+  </div>
+</body>
+</html>
