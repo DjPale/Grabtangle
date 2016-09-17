@@ -1,7 +1,7 @@
 angular.module('grabtangle', ['ngAnimate', 'ui.bootstrap', 'datetime']);
 angular.module('grabtangle').controller('GrabtangleMainController', ['DataService', '$scope', '$window', '$timeout', function(DataService, $scope, $window, $timeout) 
 {
-  const remote = require('electron').remote;
+  const ipc = require('electron').ipcRenderer;
 
   var vm = $scope;
 
@@ -25,9 +25,17 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
   vm.activeFilter = 'Today';
   vm.filter = [];
 
-  vm.filter['Overdue'] = function(item)
+  // filter without categories (so we don't need to summarize them)
+  vm.ufilter = [];
+
+  vm.ufilter['Overdue'] = function(item)
   {
     return (item.completed == false && item.due < vm.dates[0].d);
+  };
+
+  vm.ufilter['Long'] = function(item)
+  {
+    return (item.completed == false && item.due >= vm.dates[3].d);
   };
 
   vm.filter['Today'] = function(item)
@@ -157,4 +165,13 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
     var electronWindow = remote.getCurrentWindow();
     electronWindow.close();
   };
+
+  ipc.on('add-task', function() 
+  {
+    // must have timeout here for some reason
+    $timeout(function() 
+    { 
+      vm.newTask.ui_state.isOpen = true; 
+    });
+  });
 }]);

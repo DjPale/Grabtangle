@@ -98,7 +98,7 @@ class DataBackend
 
     getDates()
     {
-        if (this.dates == null || this.dates.length < 1 || this.dates[0].getDay() != Date.getDay())
+        if (this.dates == null || this.dates.length < 1|| this.dates[0].getDay() != Date.getDay())
         {
             this.generateDates();
         }
@@ -116,11 +116,10 @@ class DataBackend
 
     restore(task)
     {
-        if (undo_obj)
-        {
+        if (!this.undo_obj) return;
+
         task.action = this.undo_obj.action;
         this.undo_obj = null;
-        }
     }
 }
 

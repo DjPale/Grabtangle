@@ -8,8 +8,8 @@
   <script src="node_modules/angular-datetime-input/dist/datetime.js"></script>
 
   <script src="index.js"></script>
-  <script src="components/directives/auto-focus.js"></script>
   <script src="components/data-service/data-service.js"></script>
+  <script src="components/directives/auto-focus.js"></script>
   
   <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
   <meta charset="utf-8">
@@ -53,7 +53,7 @@
       </div>
     </script>
 
-    <nav class="navbar navbar-default navbar-fixed-top">
+    <nav id="main-nav" class="navbar navbar-default navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
           <a class="navbar-brand" href="#">Grabtangle</a>
@@ -106,7 +106,7 @@
                   <button class="btn btn-default btn-sm" ng-click="completeTask($event,task)"><span class="glyphicon glyphicon-ok-sign icon-big" /></button>
                 </div>
                 <div class="col-xs-2">
-                  <span class="label" ng-class="{'label-danger': filter.Overdue(task), 'label-success': filter.Today(task), 'label-info': filter.Week(task), 'label-primary': filter.Waiting(task)}">{{task.due | date: 'dd.MM.yy'}}</span>
+                  <span class="label" ng-class="{'label-danger': ufilter.Overdue(task), 'label-success': filter.Today(task), 'label-info': filter.Week(task), 'label-primary': filter.Waiting(task), 'label-warning': ufilter.Long(task)}">{{task.due | date: 'dd.MM.yy'}}</span>
                   <i class="pull-right glyphicon icon-big" ng-class="{'glyphicon-chevron-down': task.ui_state.isOpen, 'glyphicon-chevron-right': !task.ui_state.isOpen}"></i>
                 </div>
               </div>

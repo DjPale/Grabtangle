@@ -6,23 +6,37 @@ const app = electron.app;
 const Tray = electron.Tray;
 const Menu = electron.Menu;
 const BrowserWindow = electron.BrowserWindow;
+const ipc = electron.ipcMain;
+
+const DataBackend = require('./components/data-service/DataBackend.js');
 
 let appIcon = null;
-let trayWin = null;
+let win = null;
 
-
-function showTrayWindow()
+function toggleMainWindow()
 {
-  if (trayWin && !trayWin.isVisible()) 
+  if (!win) return;
+
+  if (win.isVisible())
   {
-    let trayBounds = appIcon.getBounds();
-    let winBounds = trayWin.getBounds();
-    winBounds.x = trayBounds.x - winBounds.width + 50;
-    winBounds.y = trayBounds.y - winBounds.height - 10;
-    trayWin.setBounds(winBounds);
-    trayWin.show();
+    win.hide();
+  }
+  else
+  {
+    win.show();
+    win.focus();
   }
 }
+
+function showMainWindow(addTask)
+{
+  win.show();
+  //win.focus();
+
+  if (addTask) win.send('add-task');
+}
+
+global['backend'] = new DataBackend();
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
@@ -35,7 +49,7 @@ app.on('window-all-closed', function () {
 app.on('ready', function () {
 
   // Create the browser window.
-  let win = new BrowserWindow({ width: 800, height: 800, maximizable: false });
+  win = new BrowserWindow({ width: 800, height: 800, maximizable: false });
   // and load the index.html of the app.
   win.loadURL('file://' + __dirname + '/index.html');
 
@@ -44,8 +58,11 @@ app.on('ready', function () {
 
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: 'Quick add task',
-      click: showTrayWindow
+      label: 'Add Task',
+      click: function()
+      {
+        showMainWindow(true);
+      }
     },
     {
       type: 'separator'
@@ -59,18 +76,19 @@ app.on('ready', function () {
     }
   ]);
 
-  appIcon.on('click', function() { if (trayWin && trayWin.isVisible()) trayWin.hide(); });
-  appIcon.on('double-click', showTrayWindow);
+  appIcon.on('double-click', function()
+  {
+    showMainWindow(true);
+  });
 
+/*
+  appIcon.on('click', function()
+  {
+    toggleMainWindow(true);
+  });
+*/
   appIcon.setToolTip('Grabtangle');
   appIcon.setContextMenu(contextMenu);
-
-  trayWin = new BrowserWindow({
-     width: 555, height: 200, frame: false, show: false, 
-     resizable: false, alwaysOnTop: true, skipTaskbar: true });
-  //trayWin.setMenu(null);
-
-  trayWin.loadURL('file://' + __dirname + '/components/tray-popup/tray-popup.html');
 
   // Open the devtools.
   //win.openDevTools();
@@ -81,7 +99,6 @@ app.on('ready', function () {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null;
-    if (trayWin) trayWin.close();
   });
 
 });
