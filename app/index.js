@@ -10,7 +10,6 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
   var vm = $scope;
 
   vm.oneAtATime = true;
-
   vm.tasks = DataService.getTasks();
   vm.dates = DataService.getDates();
   vm.newTask = DataService.getNewTask();
@@ -79,8 +78,6 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
     };
   };
 
-  refreshCount();
-
   function refreshCount()
   {
     angular.forEach(Object.keys(vm.filter), function(key)
@@ -96,7 +93,13 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
       });
     });
   }
- 
+
+  DataService.loadData(function(tasks) 
+  {
+    refreshCount(); 
+    $scope.$apply();
+  });
+
   vm.setNewDate = function($event,task,d,ui_state_name)
   {
     if (task)
@@ -176,7 +179,7 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
 
     vm.undoPromise = $timeout(function() 
     { 
-      DataService.clearUndo();
+      vm.closeUndo();
     }, 
     UNDO_TIME);
   }
@@ -208,13 +211,17 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
     var electronWindow = remote.getCurrentWindow();
     if (!electronWindow.isMinimized()) {
         electronWindow.minimize();     
-    }     
+        DataService.adviseWrite();     
+    }
   };
 
   vm.winClose = function()
   {
-    var electronWindow = remote.getCurrentWindow();
-    electronWindow.close();
+    DataService.adviseWrite(function()
+    {
+      var electronWindow = remote.getCurrentWindow();
+      electronWindow.close();
+    });     
   };
 
   ipc.on('add-task', function() 

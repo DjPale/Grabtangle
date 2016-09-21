@@ -6,14 +6,18 @@ const UNDO_UPDATE = Symbol('Update');
 
 class DataBackend
 {
-    constructor()
+    constructor(backend)
     {
+        this.backend = backend;
+
+        /*
         this.tasks =
         [
             { completed: false, project: 'Grabtangle', action: 'Test databinding', due: new Date('2016-09-06'), waiting: false },
             { completed: false, project: 'Raspberry PI', action: 'Check network boot stuff (@NoCode)', due: new Date('2016-08-25'), waiting: false }
         ];
-
+        */
+        this.tasks = [];
         this.newTask = { project: '', action: '', due: new Date(), completed: false, waiting: false };
         this.undo = { taskCopy: null, taskRef: null, undoType: UNDO_NONE, text: '', active: false };
         this.guiStateInitFunction = null;
@@ -32,11 +36,39 @@ class DataBackend
 
         let scope = this;
 
-        this.tasks.forEach(function(task) {
-            scope.applyGuiState(task);
-        });
+        if (this.tasks)
+        {
+            this.tasks.forEach(function(task) 
+            {
+                scope.applyGuiState(task);
+            });
+        }
 
         this.applyGuiState(this.newTask);
+    }
+
+    adviseWrite(callback = null)
+    {
+        this.backend.writeData('tasks', this.tasks, callback);
+    }
+
+    loadData(callback = null)
+    {
+        let scope = this;
+ 
+        this.backend.readData('tasks', function(error, data)
+        {
+            data.forEach(function(task) 
+            {
+                if (!task.completed)
+                {
+                    task.due = new Date(task.due);
+                    scope.tasks.push(task);
+                }
+            });
+
+            if (callback) callback(this.tasks);
+        });
     }
 
     copyTask(src, dst)
@@ -74,6 +106,8 @@ class DataBackend
         this.undo.taskCopy = null;
         this.undo.taskRef = null;
         this.undo.undoType = UNDO_NONE;
+
+        this.adviseWrite();
     }
 
     restoreUndo(clearAfter = true)
