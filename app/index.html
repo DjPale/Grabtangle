@@ -33,6 +33,16 @@
     .popover {
       max-width: 555px;
       width: 555px;
+    }
+
+    .undo-box {
+      position: fixed; 
+      bottom: 10px; 
+    }
+
+    .icon-flipped {
+      transform: scaleX(-1);
+    }
   </style>
 </head>
 
@@ -137,6 +147,10 @@
           </div>
         </div>
       </uib-accordion>
+      <div uib-alert class="alert-danger col-xs-6 col-xs-offset-1 undo-box" ng-show="undo.active" close="closeUndo()">
+        <button class="btn btn-default btn-sm btn-danger" ng-click="restoreUndo()"><span class="glyphicon glyphicon-share-alt icon-flipped"></span> Undo</button>
+        <span>{{undo.text}}</span>
+      </div>
     </div>
   </div>
 </body>

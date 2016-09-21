@@ -1,9 +1,13 @@
+const DAY_ADD = 86400000;
+const UNDO_NONE = Symbol('None');
+const UNDO_ADD = Symbol('Add');
+const UNDO_DELETE = Symbol('Delete');
+const UNDO_UPDATE = Symbol('Update');
+
 class DataBackend
 {
     constructor()
     {
-        this.DAY_ADD = 86400000;
-
         this.tasks =
         [
             { completed: false, project: 'Grabtangle', action: 'Test databinding', due: new Date('2016-09-06'), waiting: false },
@@ -11,7 +15,7 @@ class DataBackend
         ];
 
         this.newTask = { project: '', action: '', due: new Date(), completed: false, waiting: false };
-        this.undoTask = null;
+        this.undo = { taskCopy: null, taskRef: null, undoType: UNDO_NONE, text: '', active: false };
         this.guiStateInitFunction = null;
         this.guiStatePropertyName = '';
     }
@@ -35,6 +39,48 @@ class DataBackend
         this.applyGuiState(this.newTask);
     }
 
+    setUndo(task, text, undoType = UNDO_UPDATE)
+    {
+        if (!task) return;
+
+        this.undo.taskCopy = { completed: task.completed, project: task.project, action: task.action, category: task.category, due: new Date(task.valueOf()), waiting: task.waiting };
+        this.undo.taskRef = task;
+        this.undo.text = text;
+        this.undo.active = true;
+        this.undo.undoType = undoType;
+    }
+
+    clearUndo()
+    {
+        this.undo.active = false;
+        this.undo.text = '';
+        this.undo.taskCopy = null;
+        this.undo.taskRef = null;
+        this.undo.undoType = UNDO_NONE;
+    }
+
+    restoreUndo()
+    {
+        if (!this.undo.taskRef || this.undo.undoType == UNDO_NONE) return;
+
+        let u = this.undo;
+
+        if (u.undoType == UNDO_ADD)
+        {
+            let idx = this.tasks.findIndex(function(element, index, array)
+            {
+                return (u.taskRef == element);
+            });
+
+            if (idx != -1) this.tasks.splice(idx, 1);
+        }
+        else if (u.undoType == UNDO_UPDATE)
+        {
+        }
+
+        this.clearUndo();
+    }
+
     getTasks()
     {
         return this.tasks;
@@ -52,14 +98,20 @@ class DataBackend
         this.newTask.due = new Date(); 
     }
 
-    commitNewTask()
+    commitNewTask(commitText = null)
     {
         if (this.newTask.action == '') return;
 
         let addTask = { project: this.newTask.project, action: this.newTask.action, due: new Date(this.newTask.due.valueOf()), completed: false, waiting: false };
-        this.applyGuiState(addTask);
 
         this.tasks.push(addTask);
+
+        if (commitText != null)
+        {
+            this.setUndo(addTask, commitText, UNDO_ADD);
+        }
+
+        this.applyGuiState(addTask);
     }
 
     generateDates()
@@ -70,23 +122,23 @@ class DataBackend
         today.setSeconds(0);
         today.setMilliseconds(0);
 
-        let tomorrow = new Date(today.valueOf() + this.DAY_ADD);
+        let tomorrow = new Date(today.valueOf() + DAY_ADD);
 
         let dow = today.getDay();
 
         let weekend = new Date(today.valueOf());
         if (dow > 0 && dow < 6)
         {
-        weekend.setTime(weekend.valueOf() + ((6 - dow) * this.DAY_ADD));
+        weekend.setTime(weekend.valueOf() + ((6 - dow) * DAY_ADD));
         }
 
         let nextweek = new Date(today.valueOf());
         let daystonext = (7 - dow + 1) % 7; // how long to next day of week (Monday)
         if (daystonext == 0) daystonext = 7; // this means next Monday if we are already on Monday
-        nextweek.setTime(nextweek.valueOf() + daystonext * this.DAY_ADD);
+        nextweek.setTime(nextweek.valueOf() + daystonext * DAY_ADD);
         
         let twoweeks = new Date(today.valueOf());
-        twoweeks.setTime(twoweeks.valueOf() + 14 * this.DAY_ADD); 
+        twoweeks.setTime(twoweeks.valueOf() + 14 * DAY_ADD); 
 
         this.dates = [];
         this.dates.push({ n: 'Today', d: today});
@@ -106,20 +158,9 @@ class DataBackend
         return this.dates;
     }
 
-    
-    setUndo(task)
+    getUndo()
     {
-        if (!task) return;
-
-        this.undo_obj = { completed: task.completed, project: task.project, action: task.action, category: task.category, due: new Date(task.valueOf()), waiting: task.waiting };
-    }
-
-    restore(task)
-    {
-        if (!this.undo_obj) return;
-
-        task.action = this.undo_obj.action;
-        this.undo_obj = null;
+        return this.undo;
     }
 }
 

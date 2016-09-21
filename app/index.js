@@ -1,7 +1,9 @@
 angular.module('grabtangle', ['ngAnimate', 'ui.bootstrap', 'datetime']);
 angular.module('grabtangle').controller('GrabtangleMainController', ['DataService', '$scope', '$window', '$timeout', function(DataService, $scope, $window, $timeout) 
 {
-  const ipc = require('electron').ipcRenderer;
+  const electron = require('electron');
+  const ipc = electron.ipcRenderer;
+  const remote = electron.remote;
 
   var vm = $scope;
 
@@ -10,6 +12,7 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
   vm.tasks = DataService.getTasks();
   vm.dates = DataService.getDates();
   vm.newTask = DataService.getNewTask();
+  vm.undo = DataService.getUndo();
 
   DataService.setGuiStateInit('ui_state', function(task) 
   {
@@ -130,7 +133,7 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
   {
     if (task)
     {
-      DataService.setUndo(task);
+      DataService.setUndo(task, 'Moved task ' + (task.waiting ? 'from' : 'to') + ' waiting');
       task.waiting = !task.waiting;
       refreshCount();
     }
@@ -139,7 +142,7 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
 
   vm.addTask = function()
   {    
-    DataService.commitNewTask()
+    DataService.commitNewTask('Added new task');
     vm.newTask.ui_state.isOpen = false;
     DataService.clearNewTask();
 
@@ -150,6 +153,16 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
   {
     DataService.clearNewTask();
     vm.newTask.ui_state.isOpen = false;
+  };
+
+  vm.closeUndo = function()
+  {
+    DataService.clearUndo();
+  };
+
+  vm.restoreUndo = function()
+  {
+    DataService.restoreUndo();
   };
 
   vm.winMinimize = function()
