@@ -5,6 +5,8 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
   const ipc = electron.ipcRenderer;
   const remote = electron.remote;
 
+  const UNDO_TIME = 5000;
+
   var vm = $scope;
 
   vm.oneAtATime = true;
@@ -99,6 +101,9 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
   {
     if (task)
     {
+      DataService.setUndo(task, 'Change task time');
+      vm.startUndoTimer();
+
       task.due = d.d;
       task.ui_state[ui_state_name] = false;
       $event.preventDefault();
@@ -111,6 +116,9 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
   {
     if (task)
     { 
+      DataService.setUndo(task, 'Completed task');
+      vm.startUndoTimer();
+
       task.completed = true;
       refreshCount();
     }
@@ -121,8 +129,9 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
   {
     if (task)
     {
-      task.ui_state.isOpen = true;
       DataService.setUndo(task);
+
+      task.ui_state.isOpen = true;
       task.action = '';
       refreshCount();
     }
@@ -134,6 +143,8 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
     if (task)
     {
       DataService.setUndo(task, 'Moved task ' + (task.waiting ? 'from' : 'to') + ' waiting');
+      vm.startUndoTimer();
+
       task.waiting = !task.waiting;
       refreshCount();
     }
@@ -143,6 +154,8 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
   vm.addTask = function()
   {    
     DataService.commitNewTask('Added new task');
+    vm.startUndoTimer();
+
     vm.newTask.ui_state.isOpen = false;
     DataService.clearNewTask();
 
@@ -155,6 +168,19 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
     vm.newTask.ui_state.isOpen = false;
   };
 
+  vm.undoPromise = null;
+
+  vm.startUndoTimer = function()
+  {
+    if (vm.undoPromise) $timeout.cancel(vm.undoPromise);
+
+    vm.undoPromise = $timeout(function() 
+    { 
+      DataService.clearUndo();
+    }, 
+    UNDO_TIME);
+  }
+
   vm.closeUndo = function()
   {
     DataService.clearUndo();
@@ -163,7 +189,19 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
   vm.restoreUndo = function()
   {
     DataService.restoreUndo();
+
+    refreshCount();
   };
+
+  vm.checkEscape = function($event, task)
+  {
+    if ($event.keyCode === 27)
+    { 
+      DataService.restoreUndo(false);
+
+      if (task) task.ui_state.isOpen = false;
+    }
+  }
 
   vm.winMinimize = function()
   {

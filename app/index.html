@@ -12,38 +12,8 @@
   <script src="components/directives/auto-focus.js"></script>
   
   <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/main.css" rel="stylesheet">
   <meta charset="utf-8">
-  <style>
-    .icon-big {
-      font-size: 20px;
-    }
-    
-    .btn-ctrl {
-      border: none;
-    }
-    
-    body {
-      padding-top: 90px;
-    }
-    
-    html {
-      overflow-y: scroll;
-    }
-    
-    .popover {
-      max-width: 555px;
-      width: 555px;
-    }
-
-    .undo-box {
-      position: fixed; 
-      bottom: 10px; 
-    }
-
-    .icon-flipped {
-      transform: scaleX(-1);
-    }
-  </style>
 </head>
 
 <body>
@@ -128,7 +98,7 @@
                 <input type="text" class="form-control" ng-model="task.project" uib-typeahead="task.project as task.project for task in tasks | filter:{project:$viewValue}" />
               </div>
               <div class="col-xs-6">
-                <input type="text" class="form-control" ng-model="task.action" auto-focus="{{ task.ui_state.isOpen }}" />
+                <input type="text" class="form-control" ng-model="task.action" ng-keyup="checkEscape($event,task)" auto-focus="{{ task.ui_state.isOpen }}" />
               </div>
               <div class="col-xs-3">
                 <div class="input-group">
@@ -147,9 +117,9 @@
           </div>
         </div>
       </uib-accordion>
-      <div uib-alert class="alert-danger col-xs-6 col-xs-offset-1 undo-box" ng-show="undo.active" close="closeUndo()">
+      <div uib-alert class="alert-danger col-xs-5 col-xs-offset-1 undo-box" ng-show="undo.active" close="closeUndo()">
         <button class="btn btn-default btn-sm btn-danger" ng-click="restoreUndo()"><span class="glyphicon glyphicon-share-alt icon-flipped"></span> Undo</button>
-        <span>{{undo.text}}</span>
+        <span style="margin-left: 8px;">{{undo.text}}</span>
       </div>
     </div>
   </div>

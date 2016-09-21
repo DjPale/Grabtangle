@@ -39,15 +39,32 @@ class DataBackend
         this.applyGuiState(this.newTask);
     }
 
-    setUndo(task, text, undoType = UNDO_UPDATE)
+    copyTask(src, dst)
+    {
+        if (!src || !dst) return;
+
+        dst.project = src.project;
+        dst.action = src.action;
+        dst.due = new Date(src.due.valueOf());
+        dst.waiting = src.waiting;
+        dst.completed = src.completed;
+    }
+
+    setUndo(task, text = null, undoType = UNDO_UPDATE)
     {
         if (!task) return;
 
-        this.undo.taskCopy = { completed: task.completed, project: task.project, action: task.action, category: task.category, due: new Date(task.valueOf()), waiting: task.waiting };
-        this.undo.taskRef = task;
-        this.undo.text = text;
-        this.undo.active = true;
         this.undo.undoType = undoType;
+        this.undo.taskRef = task;
+        this.undo.taskCopy = {};
+
+        this.copyTask(task, this.undo.taskCopy);
+
+        if (text)
+        {
+            this.undo.text = text;
+            this.undo.active = true;
+        }    
     }
 
     clearUndo()
@@ -59,9 +76,9 @@ class DataBackend
         this.undo.undoType = UNDO_NONE;
     }
 
-    restoreUndo()
+    restoreUndo(clearAfter = true)
     {
-        if (!this.undo.taskRef || this.undo.undoType == UNDO_NONE) return;
+        if (!this.undo.taskRef || this.undo.undoType == UNDO_NONE) return false;
 
         let u = this.undo;
 
@@ -76,9 +93,12 @@ class DataBackend
         }
         else if (u.undoType == UNDO_UPDATE)
         {
+            this.copyTask(u.taskCopy, u.taskRef);
         }
 
-        this.clearUndo();
+        if (clearAfter) this.clearUndo();
+
+        return true;
     }
 
     getTasks()
@@ -105,11 +125,7 @@ class DataBackend
         let addTask = { project: this.newTask.project, action: this.newTask.action, due: new Date(this.newTask.due.valueOf()), completed: false, waiting: false };
 
         this.tasks.push(addTask);
-
-        if (commitText != null)
-        {
-            this.setUndo(addTask, commitText, UNDO_ADD);
-        }
+        this.setUndo(addTask, commitText, UNDO_ADD);
 
         this.applyGuiState(addTask);
     }
