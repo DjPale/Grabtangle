@@ -34,23 +34,23 @@
     </script>
 
     <nav id="main-nav" class="navbar navbar-default navbar-fixed-top">
-      <div class="container-fluid">
+      <div class="container-fluid drag-enable" >
         <div class="navbar-header">
           <a class="navbar-brand" href="#">Grabtangle</a>
         </div>
 
-        <button type="button" uib-btn-checkbox ng-model="newTask.ui_state.isOpen" class="btn btn-default navbar-btn navbar-left" uib-popover-template="'templates/add-popup.html'" popover-placement="bottom-left" popover-title="New task" popover-is-open="newTask.ui_state.isOpen">
+        <button type="button" uib-btn-checkbox ng-model="newTask.ui_state.isOpen" class="btn btn-default navbar-btn navbar-left drag-disable" uib-popover-template="'templates/add-popup.html'" popover-placement="bottom-left" popover-title="New task" popover-is-open="newTask.ui_state.isOpen">
           <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         </button>
 
         <form class="navbar-form navbar-left" role="search">
           <div class="form-group has-success has-feedback">
-            <input type="text" class="form-control" placeholder="Search..." ng-model="searchField" />
+            <input type="text" class="form-control drag-disable" placeholder="Search..." ng-model="searchField" />
             <span class="glyphicon glyphicon-search form-control-feedback"></span>
           </div>
         </form>
-        <label class="btn btn-default navbar-btn navbar-right btn-ctrl" ng-click="winClose()"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></label>
-        <label class="btn btn-default navbar-btn navbar-right btn-ctrl" ng-click="winMinimize()"><span class="glyphicon glyphicon-minus" style="vertical-align: inherit;" aria-hidden="true"></span></label>
+        <label class="btn btn-default navbar-btn navbar-right btn-ctrl drag-disable" ng-click="winClose()"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></label>
+        <label class="btn btn-default navbar-btn navbar-right btn-ctrl drag-disable" ng-click="winMinimize()"><span class="glyphicon glyphicon-minus" style="vertical-align: inherit;" aria-hidden="true"></span></label>
       </div>
       <div style="padding: 5px 5px 0px 5px;">
 
