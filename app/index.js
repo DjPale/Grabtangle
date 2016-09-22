@@ -104,13 +104,21 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
   {
     if (task)
     {
-      DataService.setUndo(task, 'Change task time');
-      vm.startUndoTimer();
-
-      task.due = d.d;
       task.ui_state[ui_state_name] = false;
       $event.preventDefault();
       $event.stopPropagation();
+
+      // ignore same date
+      // TODO: Debug - this is not working!
+      if (d.d.getTime() == task.due.getTime()) return;
+
+      if (task != vm.newTask)
+      {
+        DataService.setUndo(task, 'Change task time');
+        vm.startUndoTimer();
+      }
+
+      task.due = d.d;
       refreshCount();
     }
   };
@@ -182,7 +190,7 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
       vm.closeUndo();
     }, 
     UNDO_TIME);
-  }
+  };
 
   vm.closeUndo = function()
   {
@@ -204,7 +212,7 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
 
       if (task) task.ui_state.isOpen = false;
     }
-  }
+  };
 
   vm.winMinimize = function()
   {

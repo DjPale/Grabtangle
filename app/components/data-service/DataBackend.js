@@ -63,6 +63,10 @@ class DataBackend
                 if (!task.completed)
                 {
                     task.due = new Date(task.due);
+                    task.due.setHours(0);
+                    task.due.setMinutes(0);
+                    task.due.setSeconds(0);
+                    task.due.setMilliseconds(0);
                     scope.tasks.push(task);
                 }
             });
