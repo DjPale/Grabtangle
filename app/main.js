@@ -49,7 +49,7 @@ app.on('window-all-closed', function () {
 app.on('ready', function () {
 
   // Create the browser window.
-  win = new BrowserWindow({ width: 800, height: 800, maximizable: false, fullscreenable: false, resizable: false, frame: false });
+  win = new BrowserWindow({ width: 800, height: 600, maximizable: false, fullscreenable: false, resizable: false, frame: false });
   //win.setMenu(null);
   // and load the index.html of the app.
   win.loadURL('file://' + __dirname + '/index.html');
@@ -58,6 +58,13 @@ app.on('ready', function () {
   appIcon = new Tray(iconPath);
 
   const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Show',
+      click: function()
+      {
+        showMainWindow(false);
+      }
+    },
     {
       label: 'Add Task',
       click: function()

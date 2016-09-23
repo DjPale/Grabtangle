@@ -6,6 +6,8 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
   const remote = electron.remote;
 
   const UNDO_TIME = 5000;
+  const KEYCODE_ESC = 27;
+  const KEYCODE_ENTER = 13;
 
   var vm = $scope;
 
@@ -109,7 +111,6 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
       $event.stopPropagation();
 
       // ignore same date
-      // TODO: Debug - this is not working!
       if (d.d.getTime() == task.due.getTime()) return;
 
       if (task != vm.newTask)
@@ -162,7 +163,7 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
     $event.stopPropagation();
   };
 
-  vm.addTask = function()
+  vm.addNewTask = function()
   {    
     DataService.commitNewTask('Added new task');
     vm.startUndoTimer();
@@ -173,7 +174,7 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
     refreshCount();
   };
 
-  vm.clearTask = function()
+  vm.clearNewTask = function()
   {
     DataService.clearNewTask();
     vm.newTask.ui_state.isOpen = false;
@@ -204,13 +205,29 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
     refreshCount();
   };
 
-  vm.checkEscape = function($event, task)
+  vm.checkKey = function($event, task)
   {
-    if ($event.keyCode === 27)
+    if ($event.keyCode === KEYCODE_ESC)
     { 
       DataService.restoreUndo(false);
 
       if (task) task.ui_state.isOpen = false;
+    }
+    else if ($event.keyCode === KEYCODE_ENTER)
+    {
+      if (task) task.ui_state.isOpen = false;
+    }
+  };
+
+  vm.checkNewTaskKey = function($event)
+  {
+    if ($event.keyCode === KEYCODE_ESC)
+    {
+      vm.clearNewTask();
+    }
+    else if ($event.keyCode === KEYCODE_ENTER)
+    {
+      vm.addNewTask();
     }
   };
 
