@@ -51,7 +51,7 @@
 
         <form class="navbar-form navbar-left" role="search">
           <div class="form-group has-success has-feedback">
-            <input type="text" class="form-control drag-disable" placeholder="Search..." ng-model="searchField" />
+            <input id="search-field" type="text" class="form-control drag-disable" placeholder="Search..." ng-model="searchField" ng-model-options="{ debounce: 250 }" />
             <span class="glyphicon glyphicon-search form-control-feedback"></span>
           </div>
         </form>
@@ -101,7 +101,7 @@
           <div class="container-fluid">
             <div class="row">
               <div class="col-xs-3">
-                <input type="text" class="form-control" ng-model="task.project" uib-typeahead="task.project as task.project for task in tasks | filter:{project:$viewValue}" />
+                <input type="text" class="form-control" ng-model="task.project" typeahead-wait-ms="250" uib-typeahead="task.project as task.project for task in tasks | filter:{project:$viewValue}" />
               </div>
               <div class="col-xs-6">
                 <input type="text" class="form-control" ng-model="task.action" ng-keyup="checkKey($event,task)" auto-focus="{{ task.ui_state.isOpen }}" />
@@ -116,7 +116,7 @@
                       <li role="menuitem" ng-repeat="d in dates"><a ng-click="setNewDate($event,task,d,'cal_open')">{{d.n}} ({{d.d | date: 'dd.MM.yy'}})</a></li>
                     </ul>
                   </div>
-                  <input type="text" class="form-control" datetime="dd.MM.yy" aria-label="Set date" ng-model="task.due">
+                  <input type="text" class="form-control" datetime="dd.MM.yy" aria-label="Set date" ng-model="task.due" ng-model-options="{ updateOn: 'blur' }">
                 </div>
               </div>
             </div>
