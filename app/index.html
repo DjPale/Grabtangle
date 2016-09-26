@@ -2,15 +2,21 @@
 <html ng-app="grabtangle">
 
 <head>
+  <!-- build:js scripts/vendor.js -->
   <script src="node_modules/angular/angular.js"></script>
   <script src="node_modules/angular-animate/angular-animate.js"></script>
   <script src="node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
   <script src="node_modules/angular-datetime-input/dist/datetime.js"></script>
+  <!-- endbuild -->
 
+  <!-- build:app scripts/app.js -->
   <script src="index.js"></script>
-  <script src="components/data-service/data-service.js"></script>
+  <!-- endbuild -->
+
+  <!-- TODO: check if this can be included in an usemin block later... -->
   <script src="components/directives/auto-focus.js"></script>
-  
+  <script src="components/data-service/data-service.js"></script>
+
   <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/main.css" rel="stylesheet">
   <meta charset="utf-8">

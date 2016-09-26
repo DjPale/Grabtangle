@@ -8,8 +8,6 @@ const Menu = electron.Menu;
 const BrowserWindow = electron.BrowserWindow;
 const ipc = electron.ipcMain;
 
-const DataBackend = require('./components/data-service/DataBackend.js');
-
 let appIcon = null;
 let win = null;
 
@@ -35,8 +33,6 @@ function showMainWindow(addTask)
 
   if (addTask) win.send('add-task');
 }
-
-global['backend'] = new DataBackend();
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {

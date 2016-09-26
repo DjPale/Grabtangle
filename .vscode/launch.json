@@ -9,7 +9,7 @@
             "stopOnEntry": true,
             "args": [],
             "cwd": "${workspaceRoot}",
-            "runtimeExecutable": "${workspaceRoot}/app/node_modules/.bin/electron.cmd",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd",
             "runtimeArgs": [
                 "app",
                 "--enable-logging"
@@ -33,7 +33,7 @@
             "name": "Debug",
             "type": "chrome",
             "request": "launch",
-            "runtimeExecutable": "${workspaceRoot}/app/node_modules/.bin/electron.cmd",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd",
             "runtimeArgs": [
                 "${workspaceRoot}/app",
                 "--enable-logging",

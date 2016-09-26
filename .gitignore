@@ -1,6 +1,9 @@
 node_modules
+build
 dist
+installer
 typings
+grabtangle-*/
 
 *.tgz
 *.log
