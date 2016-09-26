@@ -104,7 +104,7 @@
                 <input type="text" class="form-control" ng-model="task.project" uib-typeahead="task.project as task.project for task in tasks | filter:{project:$viewValue}" />
               </div>
               <div class="col-xs-6">
-                <input type="text" class="form-control" ng-model="task.action" ng-keyup="checkEscape($event,task)" auto-focus="{{ task.ui_state.isOpen }}" />
+                <input type="text" class="form-control" ng-model="task.action" ng-keyup="checkKey($event,task)" auto-focus="{{ task.ui_state.isOpen }}" />
               </div>
               <div class="col-xs-3">
                 <div class="input-group">

@@ -8,7 +8,7 @@
     <div class="form-group">
     <label for="newTaskAction" class="col-xs-2 control-label">Action</label>
     <div class="col-xs-10">
-        <input id="newTaskAction" type="text" class="form-control" ng-model="newTask.action" />
+        <input id="newTaskAction" type="text" class="form-control" ng-model="newTask.action" ng-keyup="checkNewTaskKey($event)"/>
     </div>
     </div>
     <div class="form-group">
@@ -27,10 +27,10 @@
     </div>
     </div>
     <div class="col-xs-2 col-xs-offset-2">
-        <button type="button" class="btn btn-success" ng-click="addTask()">Add Task</button>
+        <button type="button" class="btn btn-success" ng-click="addNewTask()">Add Task</button>
     </div>
     <div class="col-xs-2">
-        <button type="button" class="btn btn-danger" ng-click="clearTask()">Clear</button>
+        <button type="button" class="btn btn-danger" ng-click="clearNewTask()">Clear</button>
     </div>
     </div>
 </form>
