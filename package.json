@@ -1,23 +1,19 @@
 {
-  "name": "grabtangle-dev",
+  "name": "grabtangle-build",
   "version": "0.0.1",
-  "description": "Grabtangle dev dir",
+  "description": "Grabtangle build dir",
   "main": "gulpfile.js",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
-    "asar": "^0.12.3",
     "electron-packager": "^8.0.0",
     "electron-prebuilt": "^1.4.1",
-    "fs-jetpack": "^0.9.2",
-    "gulp": "^3.9.1",
-    "gulp-cli": "^1.2.2",
-    "gulp-minify-css": "^1.2.4",
-    "gulp-uglify": "^2.0.0",
-    "gulp-usemin": "^0.3.24",
-    "q": "^1.4.1"
+    "rimraf": "^2.5.4"
   },
   "scripts": {
+    "clean": "rimraf ./grabtangle-* ./dist",
+    "run": "electron --debug=5858 ./app",
+    "prerelease:win": "npm run clean",
+    "release:win": "electron-packager ./app --platform=win32 --asar",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -29,5 +25,9 @@
   "bugs": {
     "url": "https://github.com/DjPale/Grabtangle/issues"
   },
-  "homepage": "https://github.com/DjPale/Grabtangle#readme"
+  "homepage": "https://github.com/DjPale/Grabtangle#readme",
+  "build": {
+      "appId": "hr.creaticon.eatodo",
+      "app-category-type": "public.app-category.productivity"
+  }
 }
