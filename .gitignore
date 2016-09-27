@@ -4,6 +4,7 @@ dist
 installer
 typings
 grabtangle-*/
+.DS_Store
 
 *.tgz
 *.log

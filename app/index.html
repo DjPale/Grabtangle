@@ -58,7 +58,7 @@
         <label class="btn btn-default navbar-btn navbar-right btn-ctrl drag-disable" ng-click="winClose()"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></label>
         <label class="btn btn-default navbar-btn navbar-right btn-ctrl drag-disable" ng-click="winMinimize()"><span class="glyphicon glyphicon-minus" style="vertical-align: inherit;" aria-hidden="true"></span></label>
       </div>
-      <div style="padding: 5px 5px 0px 5px;">
+      <div class="extra-padding">
 
         <div class="btn-group btn-group-justified" role="group">
           <label class="btn btn-success" ng-model="activeFilter" uib-btn-radio="'Today'">Today <span class="badge">{{ filterCount['Today'] }}</span></label>
@@ -69,7 +69,7 @@
       </div>
     </nav>
 
-    <div style="padding: 5px 5px 0px 5px;">
+    <div class="extra-padding tasklist-area">
       <uib-accordion close-others="oneAtATime">
         <div uib-accordion-group class="panel-default" template-url="group-template.html" is-open="task.ui_state.isOpen" ng-repeat="task in tasks | filter:filterCategory()">
           <uib-accordion-heading>

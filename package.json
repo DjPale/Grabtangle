@@ -13,7 +13,9 @@
     "clean": "rimraf ./grabtangle-* ./dist",
     "run": "electron --debug=5858 ./app",
     "prerelease:win": "npm run clean",
+    "prerelease:mac": "rm -rf ./grabtangle-*",
     "release:win": "electron-packager ./app --platform=win32 --asar",
+    "release:mac": "electron-packager ./app --asar",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

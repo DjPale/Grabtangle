@@ -10,7 +10,13 @@ body {
     padding-top: 90px;
 }
 
-html {
+.extra-padding {
+    padding: 5px 5px 0px 5px;
+}
+
+.tasklist-area {
+    height: 500px;
+    max-height: 500px;
     overflow-y: scroll;
 }
 
@@ -22,6 +28,14 @@ html {
 .undo-box {
     position: fixed;
     bottom: 10px;
+}
+
+.undo-box.ng-hide-add {
+    animation: 0.25s fadeOut ease;
+}
+
+.undo-box.ng-hide-remove {
+    animation: 0.40s bounceIn ease;
 }
 
 .icon-flipped {
@@ -77,21 +91,14 @@ html {
     animation-name: bounceIn;
 }
 
-/* TODO: Make separate class for undo-bar to avoid bounce on typeahead module */
-.ng-hide-add {
-    animation: 0.25s fadeOut ease;
-}
-
-.ng-hide-remove {
-    animation: 0.40s bounceIn ease;
-}
-
 .drag-enable {
+    user-select: none;
     -webkit-user-select: none;
     -webkit-app-region: drag;
 }
 
 .drag-disable {
-    -webkit-user-select: all;
+    user-select: text;
+    -webkit-user-select: text;
     -webkit-app-region: no-drag;
 }
