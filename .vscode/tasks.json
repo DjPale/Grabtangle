@@ -17,6 +17,9 @@
         },
         {
             "taskName": "release:win"
+        },
+        {
+            "taskName": "release:mac"
         }
 
     ]
