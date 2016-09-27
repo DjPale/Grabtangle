@@ -10,7 +10,13 @@ body {
     padding-top: 90px;
 }
 
-html {
+.extra-padding {
+    padding: 5px 5px 0px 5px;
+}
+
+.tasklist-area {
+    height: 500px;
+    max-height: 500px;
     overflow-y: scroll;
 }
 
