@@ -8,6 +8,7 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
   const UNDO_TIME = 5000;
   const KEYCODE_ESC = 27;
   const KEYCODE_ENTER = 13;
+  const TOOLTIP_DELAY = 2000;
 
   var vm = $scope;
 
@@ -16,6 +17,8 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
   vm.dates = DataService.getDates();
   vm.newTask = DataService.getNewTask();
   vm.undo = DataService.getUndo();
+
+  vm.tt_delay = TOOLTIP_DELAY;
 
   DataService.setGuiStateInit('ui_state', function(task) 
   {

@@ -79,17 +79,17 @@
                   {{task.project}} <small>{{task.action | limitTo: 30}}{{task.action.length > 30 ? '...' : ''}}</small>
                 </div>
                 <div class="col-xs-4">
-                  <button class="btn btn-default btn-sm" ng-click="newAction($event,task)"><span class="glyphicon glyphicon-edit icon-big" /></button>
+                  <button class="btn btn-default btn-sm" ng-click="newAction($event,task)" uib-tooltip="Clear and enter new action" tooltip-popup-delay="{{ tt_delay }}" tooltip-placement="auto top"><span class="glyphicon glyphicon-edit icon-big" /></button>
                   <span class="btn-group" uib-dropdown is-open="task.ui_state.date_open">
-                    <button id="button-template-url" type="button" class="btn btn-default btn-sm dropdown-toggle" uib-dropdown-toggle ng-click="$event.stopPropagation()">
+                    <button id="button-template-url" type="button" class="btn btn-default btn-sm dropdown-toggle" uib-dropdown-toggle ng-click="$event.stopPropagation()" uib-tooltip="Postpone task" tooltip-popup-delay="{{ tt_delay }}" tooltip-placement="auto top">
                       <span class="glyphicon glyphicon-time icon-big"/><span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="button-template-url">
                     <li role="menuitem" ng-repeat="d in dates"><a ng-click="setNewDate($event,task,d,'date_open')">{{d.n}} ({{d.d | date: 'dd.MM.yy'}})</a></li>
                   </ul>
                   </span>
-                  <button class="btn btn-default btn-sm" ng-click="waitTask($event,task)" uib-tooltip="Move task from/to waiting" tooltip-popup-delay="2000"><span class="glyphicon glyphicon-transfer icon-big" /></button>
-                  <button class="btn btn-default btn-sm" ng-click="completeTask($event,task)" uib-tooltip="Complete task" tooltip-popup-delay="2000"><span class="glyphicon glyphicon-ok-sign icon-big" /></button>
+                  <button class="btn btn-default btn-sm" ng-click="waitTask($event,task)" uib-tooltip="Move task from / to waiting" tooltip-popup-delay="{{ tt_delay }}" tooltip-placement="auto top"><span class="glyphicon glyphicon-transfer icon-big" /></button>
+                  <button class="btn btn-default btn-sm" ng-click="completeTask($event,task)" uib-tooltip="Complete task" tooltip-popup-delay="{{ tt_delay }}" tooltip-placement="auto top"><span class="glyphicon glyphicon-ok-sign icon-big" /></button>
                 </div>
                 <div class="col-xs-2">
                   <span class="label" ng-class="{'label-danger': ufilter.Overdue(task), 'label-success': filter.Today(task), 'label-info': filter.Week(task), 'label-primary': filter.Waiting(task), 'label-warning': ufilter.Long(task)}">{{task.due | date: 'dd.MM.yy'}}</span>
