@@ -88,8 +88,8 @@
                     <li role="menuitem" ng-repeat="d in dates"><a ng-click="setNewDate($event,task,d,'date_open')">{{d.n}} ({{d.d | date: 'dd.MM.yy'}})</a></li>
                   </ul>
                   </span>
-                  <button class="btn btn-default btn-sm" ng-click="waitTask($event,task)"><span class="glyphicon glyphicon-transfer icon-big" /></button>
-                  <button class="btn btn-default btn-sm" ng-click="completeTask($event,task)"><span class="glyphicon glyphicon-ok-sign icon-big" /></button>
+                  <button class="btn btn-default btn-sm" ng-click="waitTask($event,task)" uib-tooltip="Move task from/to waiting" tooltip-popup-delay="2000"><span class="glyphicon glyphicon-transfer icon-big" /></button>
+                  <button class="btn btn-default btn-sm" ng-click="completeTask($event,task)" uib-tooltip="Complete task" tooltip-popup-delay="2000"><span class="glyphicon glyphicon-ok-sign icon-big" /></button>
                 </div>
                 <div class="col-xs-2">
                   <span class="label" ng-class="{'label-danger': ufilter.Overdue(task), 'label-success': filter.Today(task), 'label-info': filter.Week(task), 'label-primary': filter.Waiting(task), 'label-warning': ufilter.Long(task)}">{{task.due | date: 'dd.MM.yy'}}</span>
