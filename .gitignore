@@ -6,5 +6,6 @@ typings
 grabtangle-*/
 .DS_Store
 
+*.zip
 *.tgz
 *.log
