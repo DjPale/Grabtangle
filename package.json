@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/DjPale/Grabtangle#readme",
   "build": {
-      "appId": "hr.creaticon.eatodo",
-      "app-category-type": "public.app-category.productivity"
+    "appId": "hr.creaticon.eatodo",
+    "app-category-type": "public.app-category.productivity"
   }
 }
