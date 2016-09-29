@@ -12,7 +12,6 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
 
   var vm = $scope;
 
-  vm.oneAtATime = true;
   vm.tasks = DataService.getTasks();
   vm.dates = DataService.getDates();
   vm.newTask = DataService.getNewTask();
