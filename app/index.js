@@ -82,6 +82,25 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
     };
   };
 
+  function setFilterFromTask(task)
+  {
+    if (!task) return;
+
+    let foundFilter = false;
+
+    angular.forEach(Object.keys(vm.filter), function(key)
+    {
+      if (!foundFilter)
+      {
+        if (vm.filter[key](task))
+        {
+          vm.activeFilter = key;
+          foundFilter = true;
+        }
+      }
+    });
+  }
+
   function refreshCount()
   {
     angular.forEach(Object.keys(vm.filter), function(key)
@@ -103,6 +122,14 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
     refreshCount(); 
     $scope.$apply();
   });
+
+  vm.focusTask = function(task)
+  {
+    if (!task) return;
+
+    setFilterFromTask(task);
+    task.ui_state.isOpen = true;
+  };
 
   vm.setNewDate = function($event,task,d,ui_state_name)
   {
