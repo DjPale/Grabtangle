@@ -9,6 +9,10 @@ The simplicty and mindset of only focusing on the next task at hand. Besides, wa
 ## How?
 The application is built using Angular JS version 1, Angular UI for Bootstrap and packaged using Electron. For storage it uses local JSON.files. *TBD: Firebase integration*.
 
+## Where?
+Apart from the [git repository](https://github.com/DjPale/Grabtangle), there is a fluffy landing page at [grabtangle.com](http://grabtangle.com)
+
 ## Building
 * Uses a "two-package" structure as described in numerous places, eg [here](http://electron.rocks/electron-builder-explained/).
-* Currently only Windows building is supported (through [electron-packager](https://github.com/electron-userland/electron-packager)) 
+* Windows / Mac OS X builds are supported without installers (through [electron-packager](https://github.com/electron-userland/electron-packager)) 
+* Run `npm install` in both root directory and separately for the `app/` directory
