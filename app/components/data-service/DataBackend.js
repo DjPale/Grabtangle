@@ -180,10 +180,15 @@ class DataBackend
 
         let dow = today.getDay();
 
+        let later_add = Math.min(dow + 2, 5);
+        if (dow == 0 || dow == 6) later_add = 0; 
+
+        let later = new Date(today.valueOf() + ((later_add - dow) * DAY_ADD));
+
         let weekend = new Date(today.valueOf());
         if (dow > 0 && dow < 6)
         {
-        weekend.setTime(weekend.valueOf() + ((6 - dow) * DAY_ADD));
+            weekend.setTime(weekend.valueOf() + ((6 - dow) * DAY_ADD));
         }
 
         let nextweek = new Date(today.valueOf());
@@ -197,6 +202,7 @@ class DataBackend
         this.dates = [];
         this.dates.push({ n: 'Today', d: today});
         this.dates.push({ n: 'Tomorrow', d: tomorrow});
+        this.dates.push({ n: 'Later in week', d: later});
         this.dates.push({ n: 'Weekend', d: weekend});
         this.dates.push({ n: 'Next week', d: nextweek});
         this.dates.push({ n: '2 weeks', d: twoweeks});
