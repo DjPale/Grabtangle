@@ -102,3 +102,29 @@ body {
     -webkit-user-select: text;
     -webkit-app-region: no-drag;
 }
+
+/* based on http://blog.sodhanalibrary.com/2015/12/search-box-with-reset-button-using_16.html#.V_1Rx-B94uU */
+.search-input {
+    position: relative;
+    width: 100%;
+}
+
+.search-input input {
+    padding: 10px;
+    width: 100%;
+    padding-left: 31px;
+    padding-right: 30px;
+}
+
+.search-input .left-icon {
+    position: absolute;
+    left: 10px;
+    top: 11px;
+}
+
+.search-input .right-icon {
+    position: absolute;
+    right: 10px;
+    top: 11px;
+    cursor: pointer;
+}

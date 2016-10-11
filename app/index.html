@@ -52,10 +52,10 @@
         </button>
 
         <form class="navbar-form navbar-left" role="search">
-          <div class="form-group has-success has-feedback">
-            <input id="search-field" type="text" class="form-control drag-disable" placeholder="Search..." ng-model="searchField" ng-model-options="{ debounce: 250 }"
-            />
-            <span class="glyphicon glyphicon-search form-control-feedback"></span>
+          <div class="btn-group search-input">
+            <i class="glyphicon glyphicon-search left-icon"></i>
+            <input id="search-field" type="text" class="form-control drag-disable" placeholder="Search..." ng-model="searchField" ng-model-options="{ debounce: 250 }" ng-keyup="checkClear($event)" />
+            <i class="glyphicon glyphicon-remove right-icon" ng-click="searchField=''"></i>
           </div>
         </form>
         <label class="btn btn-default navbar-btn navbar-right btn-ctrl drag-disable" ng-click="winClose()"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></label>

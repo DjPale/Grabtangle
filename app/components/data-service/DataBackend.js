@@ -10,13 +10,6 @@ class DataBackend
     {
         this.backend = backend;
 
-        /*
-        this.tasks =
-        [
-            { completed: false, project: 'Grabtangle', action: 'Test databinding', due: new Date('2016-09-06'), waiting: false },
-            { completed: false, project: 'Raspberry PI', action: 'Check network boot stuff (@NoCode)', due: new Date('2016-08-25'), waiting: false }
-        ];
-        */
         this.tasks = [];
         this.dates = [];
         this.newTask = { project: '', action: '', due: new Date(), completed: false, waiting: false };
@@ -72,7 +65,7 @@ class DataBackend
                 if (!task.completed)
                 {
                     task.due = new Date(task.due);
-                    alignDate(task.due);
+                    scope.alignDate(task.due);
                     scope.tasks.push(task);
                 }
             });
@@ -174,18 +167,10 @@ class DataBackend
         this.applyGuiState(addTask);
     }
 
-    checkRegenerateDynamicData()
-    {
-        if (this.dates && this.dates.length >= 1 && Date.getDay() != this.dates[0].d.getDay())
-        {
-            generateDates();
-        }
-    }
-
     generateDates()
     {
         let today = new Date();
-        alignDate(today);
+        this.alignDate(today);
 
         let tomorrow = new Date(today.valueOf() + DAY_ADD);
 
@@ -219,12 +204,18 @@ class DataBackend
         this.dates.push({ n: '2 weeks', d: twoweeks});
     }
 
-    getDates()
+    checkRegenerateDynamicData()
     {
-        if (this.dates == null || this.dates.length < 1)
+        var now = new Date();
+        if (this.dates.length == 0 || now.getDay() != this.dates[0].d.getDay())
         {
             this.generateDates();
         }
+    }
+
+    getDates()
+    {
+        this.generateDates();
 
         return this.dates;
     }

@@ -260,6 +260,14 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
     }
   };
 
+  vm.checkClear = function($event)
+  {
+    if ($event.keyCode === KEYCODE_ESC)
+    {
+      vm.searchField = '';
+    }
+  };
+
   vm.winMinimize = function()
   {
     var electronWindow = remote.getCurrentWindow();
