@@ -260,7 +260,7 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
     }
   };
 
-  vm.checkClear = function($event)
+  vm.checkClearSearch = function($event)
   {
     if ($event.keyCode === KEYCODE_ESC)
     {
