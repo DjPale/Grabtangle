@@ -18,10 +18,19 @@ class DataBackend
         ];
         */
         this.tasks = [];
+        this.dates = [];
         this.newTask = { project: '', action: '', due: new Date(), completed: false, waiting: false };
         this.undo = { taskCopy: null, taskRef: null, undoType: UNDO_NONE, text: '', active: false };
         this.guiStateInitFunction = null;
         this.guiStatePropertyName = '';
+    }
+
+    alignDate(dt)
+    {
+        dt.setHours(0);
+        dt.setMinutes(0);
+        dt.setSeconds(0);
+        dt.setMilliseconds(0);
     }
 
     applyGuiState(task)
@@ -63,10 +72,7 @@ class DataBackend
                 if (!task.completed)
                 {
                     task.due = new Date(task.due);
-                    task.due.setHours(0);
-                    task.due.setMinutes(0);
-                    task.due.setSeconds(0);
-                    task.due.setMilliseconds(0);
+                    alignDate(task.due);
                     scope.tasks.push(task);
                 }
             });
@@ -168,13 +174,18 @@ class DataBackend
         this.applyGuiState(addTask);
     }
 
+    checkRegenerateDynamicData()
+    {
+        if (this.dates && this.dates.length >= 1 && Date.getDay() != this.dates[0].d.getDay())
+        {
+            generateDates();
+        }
+    }
+
     generateDates()
     {
         let today = new Date();
-        today.setHours(0);
-        today.setMinutes(0);
-        today.setSeconds(0);
-        today.setMilliseconds(0);
+        alignDate(today);
 
         let tomorrow = new Date(today.valueOf() + DAY_ADD);
 
@@ -199,7 +210,7 @@ class DataBackend
         let twoweeks = new Date(today.valueOf());
         twoweeks.setTime(twoweeks.valueOf() + 14 * DAY_ADD); 
 
-        this.dates = [];
+        this.dates.length = 0;
         this.dates.push({ n: 'Today', d: today});
         this.dates.push({ n: 'Tomorrow', d: tomorrow});
         this.dates.push({ n: 'Later in week', d: later});
@@ -210,7 +221,7 @@ class DataBackend
 
     getDates()
     {
-        if (this.dates == null || this.dates.length < 1|| this.dates[0].getDay() != Date.getDay())
+        if (this.dates == null || this.dates.length < 1)
         {
             this.generateDates();
         }
