@@ -26,6 +26,13 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
     task.ui_state = { isOpen: false, date_open: false, cal_open: false };
   });
 
+  DataService.onUpdated = function()
+  {
+      console.log('timer update');
+      refreshCount(); 
+      $scope.$apply();
+  };
+
   vm.searchField = '';
 
   vm.filterCount = { 'Today': 0, 'Week': 0, 'Waiting': 0, 'All': 0 };

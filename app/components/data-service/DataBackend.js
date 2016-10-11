@@ -16,6 +16,9 @@ class DataBackend
         this.undo = { taskCopy: null, taskRef: null, undoType: UNDO_NONE, text: '', active: false };
         this.guiStateInitFunction = null;
         this.guiStatePropertyName = '';
+
+        this.autoMoveWaiting = true;
+        this.onUpdated = null;
     }
 
     alignDate(dt)
@@ -24,6 +27,19 @@ class DataBackend
         dt.setMinutes(0);
         dt.setSeconds(0);
         dt.setMilliseconds(0);
+    }
+
+    checkWaiting(now)
+    {
+        if (!this.autoMoveWaiting) return;
+
+        this.tasks.forEach(function(task)
+        {
+            if (task.due <= now)
+            {
+                task.waiting = false;
+            }
+        });
     }
 
     applyGuiState(task)
@@ -57,6 +73,8 @@ class DataBackend
     loadData(callback = null)
     {
         let scope = this;
+        let now = new Date();
+        this.alignDate(now);
  
         this.backend.readData('tasks', function(error, data)
         {
@@ -66,6 +84,12 @@ class DataBackend
                 {
                     task.due = new Date(task.due);
                     scope.alignDate(task.due);
+
+                    if (scope.autoMoveWaiting && task.due <= now) 
+                    {
+                        task.waiting = false;
+                    }
+
                     scope.tasks.push(task);
                 }
             });
@@ -210,6 +234,12 @@ class DataBackend
         if (this.dates.length == 0 || now.getDay() != this.dates[0].d.getDay())
         {
             this.generateDates();
+            this.checkWaiting(now);
+
+            if (this.onUpdated != null)
+            {
+                this.onUpdated();
+            }
         }
     }
 

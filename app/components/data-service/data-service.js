@@ -7,16 +7,17 @@ angular.module('grabtangle').factory('DataService', ['$timeout', function($timeo
 
     let checker = function()
     {
-        let td = new Date();
-        backend.alignDate(td);
-        td.setTime(td.valueOf() + backend.DAY_ADD + 1);
+        let now = new Date();
+        let tomorrow = new Date();
+        backend.alignDate(tomorrow);
+        tomorrow.setTime(tomorrow.valueOf() + 86400001);
 
         $timeout(function()
         {
             backend.checkRegenerateDynamicData();
             checker();
         }, 
-        td.valueOf());
+        tomorrow.valueOf() - now.valueOf());
     };
 
     checker();
