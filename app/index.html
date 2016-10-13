@@ -79,7 +79,7 @@
             <div class="container-fluid">
               <div class="row" style="display: flex; align-items: center;">
                 <div class="col-xs-6">
-                  {{task.project}} <small>{{task.action | limitTo: 60}}{{task.action.length > 60 ? '...' : ''}}</small>
+                  {{task.project}} <small linkify="{{task.action | limitTo: 60}}{{task.action.length > 60 ? '...' : ''}}" keyword="#" handler="setSearchField($event, '#')"></small>
                 </div>
                 <div class="col-xs-4">
                   <button class="btn btn-default btn-sm" ng-click="newAction($event,task)" uib-tooltip="Clear and enter new action" tooltip-popup-delay="{{tt_delay}}"

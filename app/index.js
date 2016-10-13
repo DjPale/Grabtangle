@@ -275,6 +275,12 @@ angular.module('grabtangle').controller('GrabtangleMainController', ['DataServic
     }
   };
 
+  vm.setSearchField = function($event, txt)
+  {
+    vm.searchField = txt;
+    $event.stopPropagation();
+  };
+
   vm.winMinimize = function()
   {
     var electronWindow = remote.getCurrentWindow();
