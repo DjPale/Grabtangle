@@ -55,7 +55,7 @@
           <div class="btn-group search-input">
             <i class="glyphicon glyphicon-search left-icon"></i>
             <input id="search-field" type="text" class="form-control drag-disable" placeholder="Search..." ng-model="searchField" ng-model-options="{ debounce: 250 }" ng-keyup="checkClearSearch($event)" />
-            <i class="glyphicon glyphicon-remove right-icon" ng-show="searchField.length > 0" ng-click="searchField = ''"></i>
+            <i class="filter-clear glyphicon glyphicon-remove right-icon" ng-show="searchField.length > 0" ng-click="searchField = ''"></i>
           </div>
         </form>
         <label class="btn btn-default navbar-btn navbar-right btn-ctrl drag-disable" ng-click="winClose()"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></label>
