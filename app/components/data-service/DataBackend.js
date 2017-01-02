@@ -216,16 +216,20 @@ class DataBackend
         if (daystonext == 0) daystonext = 7; // this means next Monday if we are already on Monday
         nextweek.setTime(nextweek.valueOf() + daystonext * DAY_ADD);
         
+        let midnextweek = new Date(nextweek.valueOf());
+        midnextweek.setTime(midnextweek.valueOf() + 2 * DAY_ADD);
+
         let twoweeks = new Date(today.valueOf());
         twoweeks.setTime(twoweeks.valueOf() + 14 * DAY_ADD); 
 
         this.dates.length = 0;
-        this.dates.push({ n: 'Today', d: today});
-        this.dates.push({ n: 'Tomorrow', d: tomorrow});
-        this.dates.push({ n: 'Later in week', d: later});
-        this.dates.push({ n: 'Weekend', d: weekend});
-        this.dates.push({ n: 'Next week', d: nextweek});
-        this.dates.push({ n: '2 weeks', d: twoweeks});
+        this.dates.push({ n: 'Today', d: today, v: true });
+        this.dates.push({ n: 'Tomorrow', d: tomorrow, v: true });
+        this.dates.push({ n: 'Later in week', d: later, v: true });
+        this.dates.push({ n: 'Weekend', d: weekend, v: true });
+        this.dates.push({ n: 'Next week', d: nextweek, v: true });
+        this.dates.push({ n: 'Mid next week', d: midnextweek, v: true });
+        this.dates.push({ n: '2 weeks', d: twoweeks, v: true });
     }
 
     checkRegenerateDynamicData()
