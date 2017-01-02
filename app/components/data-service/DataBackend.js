@@ -94,7 +94,7 @@ class DataBackend
                 }
             });
 
-            if (callback) callback(this.tasks);
+            if (callback) callback(scope.tasks);
         });
     }
 
