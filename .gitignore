@@ -4,6 +4,7 @@ dist
 installer
 typings
 grabtangle-*/
+public/
 .DS_Store
 
 *.zip
